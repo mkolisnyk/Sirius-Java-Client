@@ -17,7 +17,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.Augmenter;
 import org.reflections.Reflections;
 
-import com.github.mkolisnyk.sirius.client.Configuration;
 import com.github.mkolisnyk.sirius.client.Driver;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 
@@ -28,8 +27,10 @@ public class Page {
     private static final long SHORT_TIMEOUT = 5;
     private static final int SCROLL_TOP_PART = 9;
     private static final int SCROLL_TOTAL_PARTS = 10;
-    private static final long TIMEOUT = Configuration.timeout();
+    private static final long DEFAULT_TIMEOUT = 60L;
+    private static long timeout = DEFAULT_TIMEOUT;
     private static ConcurrentHashMap<String, Page> currentPages = new ConcurrentHashMap<String, Page>();
+    private static String defaultPagesPackage = "";
 
     private WebDriver driver;
 
@@ -37,11 +38,27 @@ public class Page {
         this.driver = driverValue;
     }
 
-    public static Page screen(String name) throws Exception {
-        return screen(name, Configuration.get("pages_package"));
+    public static long getTimeout() {
+        return timeout;
     }
 
-    public static Page screen(String name, String pagePackage) throws Exception {
+    public static void setTimeout(long timeoutValue) {
+        Page.timeout = timeoutValue;
+    }
+
+    public static String getDefaultPagesPackage() {
+        return defaultPagesPackage;
+    }
+
+    public static void setDefaultPagesPackage(String defaultPagesPackageValue) {
+        Page.defaultPagesPackage = defaultPagesPackageValue;
+    }
+
+    public static Page forName(String name) throws Exception {
+        return forName(name, getDefaultPagesPackage());
+    }
+
+    public static Page forName(String name, String pagePackage) throws Exception {
         Reflections reflections = new Reflections(pagePackage);
         Set<Class<? extends Page>> subTypes = reflections.getSubTypesOf(Page.class);
         for (Class<? extends Page> type : subTypes) {
@@ -65,12 +82,12 @@ public class Page {
         return driver;
     }
 
-    public Page navigate() {
+    public Page navigate() throws Exception {
         return this;
     }
 
     public boolean isTextPresent(String text) {
-        String locator = String.format("//*[text()='%s' or contains(text(), %s)]", text, text);
+        String locator = String.format("//*[text()='%s' or contains(text(), '%s')]", text, text);
         Control element = new Control(this, By.xpath(locator));
         return element.exists();
     }
@@ -237,12 +254,12 @@ public class Page {
         }
     }
 
-    public boolean isCurrent(long timeout) throws Exception {
+    public boolean isCurrent(long timeoutValue) throws Exception {
         Field[] fields = this.getClass().getFields();
         for (Field field : fields) {
             if (Control.class.isAssignableFrom(field.getType())) {
                 Control control = (Control) field.get(this);
-                if (!control.isExcludeFromSearch() && !control.exists(timeout)) {
+                if (!control.isExcludeFromSearch() && !control.exists(timeoutValue)) {
                     return false;
                 }
             }
@@ -251,7 +268,7 @@ public class Page {
     }
 
     public boolean isCurrent() throws Exception {
-        return isCurrent(TIMEOUT);
+        return isCurrent(timeout);
     }
 
     protected boolean allElementsAre(Control[] elements, String state) throws Exception {

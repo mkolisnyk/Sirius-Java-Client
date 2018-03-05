@@ -15,22 +15,6 @@ public final class PageFactory {
     private PageFactory() {
     }
 
-    private static By toLocator(String input) {
-        if (input.matches("^(xpath=|/)(.*)")) {
-            return By.xpath(input.replaceAll("^xpath=", ""));
-        } else if (input.matches("^id=(.*)")) {
-            return By.id(input.substring("id=".length()));
-        } else if (input.matches("^name=(.*)")) {
-            return By.name(input.substring("name=".length()));
-        } else if (input.matches("^css=(.*)")) {
-            return By.cssSelector(input.substring("css=".length()));
-        } else if (input.matches("^class=(.*)")) {
-            return By.className(input.substring("class=".length()));
-        } else {
-            return By.id(input);
-        }
-    }
-
     private static FindBy getLocatorForPlatform(FindBy[] locators, Platform platform) {
         for (FindBy locator : locators) {
             if (locator.platform().equals(platform)) {
@@ -74,5 +58,21 @@ public final class PageFactory {
             }
         }
         return page;
+    }
+
+    private static By toLocator(String input) {
+        if (input.matches("^(xpath=|/)(.*)")) {
+            return By.xpath(input.replaceAll("^xpath=", ""));
+        } else if (input.matches("^id=(.*)")) {
+            return By.id(input.substring("id=".length()));
+        } else if (input.matches("^name=(.*)")) {
+            return By.name(input.substring("name=".length()));
+        } else if (input.matches("^css=(.*)")) {
+            return By.cssSelector(input.substring("css=".length()));
+        } else if (input.matches("^class=(.*)")) {
+            return By.className(input.substring("class=".length()));
+        } else {
+            return By.id(input);
+        }
     }
 }

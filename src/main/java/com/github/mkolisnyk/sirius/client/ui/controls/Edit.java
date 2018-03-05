@@ -22,4 +22,9 @@ public class Edit extends Control {
             this.getParent().hideKeyboard();
         }
     }
+
+    @Override
+    public String getText() {
+        return super.element().getAttribute("value");
+    }
 }

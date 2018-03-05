@@ -55,6 +55,7 @@ public final class Driver {
             driver = (WebDriver) DRIVER_MAP.get(platform.getValue()).getConstructor(Capabilities.class)
                     .newInstance(capabilities);
         }
+        init(driver);
         return driver;
     }
 

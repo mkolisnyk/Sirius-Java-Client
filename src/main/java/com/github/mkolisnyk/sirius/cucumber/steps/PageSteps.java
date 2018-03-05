@@ -18,14 +18,14 @@ public class PageSteps {
     @Given("^I am on the \"(.*)\" (?:page|screen)$")
     @When("^(?:I |)go to the \"(.*)\" (?:page|screen)$")
     public void navigateToPage(String name) throws Exception {
-        Page target = Page.screen(name);
+        Page target = Page.forName(name);
         Assert.assertNotNull("Unable to find the '" + name + "' page.", target);
         target.navigate();
         verifyCurrentPage(name);
     }
     @Then("^I should see the \"(.*)\" (?:page|screen)$")
     public void verifyCurrentPage(String name) throws Exception {
-        Page target = Page.screen(name);
+        Page target = Page.forName(name);
         Assert.assertTrue("The '" + name + "' screen is not current", target.isCurrent());
         Page.setCurrent(target);
     }
