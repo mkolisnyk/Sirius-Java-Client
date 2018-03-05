@@ -10,10 +10,9 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import org.joda.time.DateTimeConstants;
-
-import java.util.Properties;
 
 public final class Configuration {
 
@@ -21,15 +20,15 @@ public final class Configuration {
     }
 
     private static Properties properties;
-
-    public static void load() throws IOException {
-        Configuration config = new Configuration();
+    public static void load(String location) throws IOException {
         properties = new Properties();
-        Enumeration<URL> enumerator = config.getClass().getClassLoader().getResources("/");
-        while (enumerator.hasMoreElements()) {
-            System.out.println(enumerator.nextElement());
+        File configFile = new File(location);
+        InputStream is = null;
+        if (configFile.exists()) {
+            is = new FileInputStream(configFile);
+        } else {
+            is = Configuration.class.getResourceAsStream(location);
         }
-        InputStream is = new FileInputStream(new File("config.properties"));
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
         try {
             properties.load(reader);
@@ -37,6 +36,9 @@ public final class Configuration {
             is.close();
             reader.close();
         }
+    }
+    public static void load() throws IOException {
+        load("config.properties");
     }
 
     public static String get(String option) {

@@ -3,8 +3,15 @@ package com.github.mkolisnyk.sirius.client;
 import java.util.HashSet;
 
 public enum Platform {
-    CHROME("chrome"), FIREFOX("firefox"), IE("ie"), SAFARI("safari"), OPERA("opera"), ANDROID_NATIVE(
-            "android_native"), ANDROID_WEB("android_web"), IOS_NATIVE("ios_native"), ANY("any");
+    CHROME("chrome"),
+    FIREFOX("firefox"),
+    IE("ie"),
+    SAFARI("safari"),
+    OPERA("opera"),
+    ANDROID_NATIVE("android_native"),
+    ANDROID_WEB("android_web"),
+    IOS_NATIVE("ios_native"),
+    ANY("any");
     private String value;
 
     Platform(String param) {

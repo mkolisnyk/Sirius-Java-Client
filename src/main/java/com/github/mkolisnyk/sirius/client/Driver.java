@@ -41,7 +41,7 @@ public final class Driver {
         return Thread.currentThread().getName() + "-" + Thread.currentThread().getId();
     }
 
-    public static void add(WebDriver driver) throws Exception {
+    public static void init(WebDriver driver) throws Exception {
         String threadName = getThreadName();
         driverThreadMap.put(threadName, driver);
     }

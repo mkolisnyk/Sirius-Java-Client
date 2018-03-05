@@ -31,6 +31,13 @@ public class TableView extends Control {
     public boolean isNotEmpty() {
         return isNotEmpty(TIMEOUT);
     }
+    public boolean isEmpty(long timeout) {
+        return this.getItem(0).disappears(timeout);
+    }
+
+    public boolean isEmpty() {
+        return isEmpty(TIMEOUT);
+    }
 
     public By getSubItemLocator(String name, int index) {
         SubItem item = this.getSubItemsMap().get(name);
