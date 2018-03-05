@@ -64,6 +64,6 @@ public enum Platform {
                 return platform;
             }
         }
-        return null;
+        return Platform.ANY;
     }
 }

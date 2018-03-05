@@ -18,6 +18,11 @@ public final class Configuration {
     }
 
     private static Properties properties;
+    private static String defaultConfigFile = "config.properties";
+    public static void reset() {
+        properties = null;
+        defaultConfigFile = "config.properties";
+    }
     public static void load(String location) throws IOException {
         properties = new Properties();
         File configFile = new File(location);
@@ -36,9 +41,15 @@ public final class Configuration {
         }
     }
     public static void load() throws IOException {
-        load("config.properties");
+        load(getDefaultConfigFile());
     }
 
+    public static String getDefaultConfigFile() {
+        return defaultConfigFile;
+    }
+    public static void setDefaultConfigFile(String defaultConfigFileValue) {
+        Configuration.defaultConfigFile = defaultConfigFileValue;
+    }
     public static String get(String option) {
         if (properties == null) {
             try {
@@ -53,6 +64,9 @@ public final class Configuration {
         }
         return value;
     }
+    public static String get(ConfigurationOption option) {
+        return get(option.toString());
+    }
 
     public static void print() {
         for (Entry<Object, Object> entry : properties.entrySet()) {
@@ -61,7 +75,7 @@ public final class Configuration {
     }
 
     public static long timeout() {
-        String value = Configuration.get("timeout");
+        String value = Configuration.get(ConfigurationOption.TIMEOUT);
         if (value == null || value.trim().equals("")) {
             return DateTimeConstants.SECONDS_PER_MINUTE;
         }
@@ -69,6 +83,6 @@ public final class Configuration {
     }
 
     public static Platform platform() {
-        return Platform.fromString(get("platform"));
+        return Platform.fromString(get(ConfigurationOption.PLATFORM));
     }
 }
