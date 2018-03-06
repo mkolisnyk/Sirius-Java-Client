@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.github.mkolisnyk</groupId>
@@ -7,7 +6,7 @@
 		<version>0.0.5</version>
 	</parent>
 	<artifactId>sirius-java-client</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
 	<name>Sirius Java Client</name>
 	<description>Common client library for automated GUI testing</description>
@@ -29,7 +28,7 @@
 		<connection>scm:git:git@github.com:mkolisnyk/Sirius-Java-Client.git</connection>
 		<developerConnection>scm:git:git@github.com:mkolisnyk/Sirius-Java-Client.git</developerConnection>
 		<url>https://github.com/mkolisnyk/Sirius-Java-Client.git</url>
-		<tag>HEAD</tag>
+		<tag>sirius-java-client-0.0.1</tag>
 	</scm>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
