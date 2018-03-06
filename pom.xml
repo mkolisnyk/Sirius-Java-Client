@@ -6,7 +6,7 @@
 		<version>0.0.5</version>
 	</parent>
 	<artifactId>sirius-java-client</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Sirius Java Client</name>
 	<description>Common client library for automated GUI testing</description>
@@ -28,7 +28,7 @@
 		<connection>scm:git:git@github.com:mkolisnyk/Sirius-Java-Client.git</connection>
 		<developerConnection>scm:git:git@github.com:mkolisnyk/Sirius-Java-Client.git</developerConnection>
 		<url>https://github.com/mkolisnyk/Sirius-Java-Client.git</url>
-		<tag>sirius-java-client-0.0.1</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
