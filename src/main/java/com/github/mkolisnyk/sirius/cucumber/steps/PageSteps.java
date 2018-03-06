@@ -61,4 +61,9 @@ public class PageSteps {
             steps.verifyFieldText(row.get("Field"), row.get("Value"));
         }
     }
+    @When("^(?:I |)click on the \"([^\"]*)\" (?:text|label)$")
+    public void clickOnText(String message) throws Throwable {
+        Page.getCurrent().getTextControl(message).click();
+    }
+
 }

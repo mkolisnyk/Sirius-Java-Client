@@ -8,6 +8,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import com.github.mkolisnyk.sirius.client.Configuration;
 import com.github.mkolisnyk.sirius.client.Context;
 import com.github.mkolisnyk.sirius.client.Driver;
+import com.github.mkolisnyk.sirius.client.ui.Page;
 
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
@@ -25,6 +26,8 @@ public class Hooks {
         Assert.assertTrue("Only web platforms are supported by this test", Configuration.platform().isWeb());
         DesiredCapabilities cap = new DesiredCapabilities();
         Driver.init("", Configuration.platform(), cap);
+        Page.setTimeout(Configuration.timeout());
+        Page.setDefaultPagesPackage(Configuration.pagesPackage());
     }
     @After
     public void afterScenario(Scenario scenario) throws Exception {

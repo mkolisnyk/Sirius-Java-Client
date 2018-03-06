@@ -85,4 +85,7 @@ public final class Configuration {
     public static Platform platform() {
         return Platform.fromString(get(ConfigurationOption.PLATFORM));
     }
+    public static String pagesPackage() {
+        return get(ConfigurationOption.PAGES_PACKAGE);
+    }
 }

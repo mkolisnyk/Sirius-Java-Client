@@ -77,6 +77,36 @@ public class Page {
     public static void setCurrent(Page newPage) {
         currentPages.put(Driver.getThreadName(), newPage);
     }
+    public static Page getCurrentFromList(Class<? extends Page>[] pageClasses,
+            int tries) throws Exception {
+        return getCurrentFromList(pageClasses, tries, false);
+    }
+    public static Page getCurrentFromList(Class<? extends Page>[] pageClasses,
+            int tries, boolean useCache) throws Exception {
+        Page[] pages = new Page[pageClasses.length];
+        for (int i = 0; i < pageClasses.length; i++) {
+            pages[i] = PageFactory.init(Driver.current(), pageClasses[i]);
+        }
+        for (int i = 0; i < tries; i++) {
+            for (Page page : pages) {
+                if (page.isCurrent(1)) {
+                    return page;
+                }
+            }
+        }
+        return null;
+    }
+    public static Control getFirstAvailableControlFromList(Control[] controls,
+            int tries) throws Exception {
+        for (int i = 0; i < tries; i++) {
+            for (Control control : controls) {
+                if (control.exists(1)) {
+                    return control;
+                }
+            }
+        }
+        return null;
+    }
 
     public WebDriver getDriver() {
         return driver;
@@ -87,8 +117,7 @@ public class Page {
     }
 
     public boolean isTextPresent(String text) {
-        String locator = String.format("//*[text()='%s' or contains(text(), '%s')]", text, text);
-        Control element = new Control(this, By.xpath(locator));
+        Control element = getTextControl(text);
         return element.exists();
     }
 
@@ -268,7 +297,7 @@ public class Page {
     }
 
     public boolean isCurrent() throws Exception {
-        return isCurrent(timeout);
+        return isCurrent(getTimeout());
     }
 
     protected boolean allElementsAre(Control[] elements, String state) throws Exception {

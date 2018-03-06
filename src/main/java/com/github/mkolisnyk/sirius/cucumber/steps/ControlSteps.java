@@ -2,6 +2,7 @@ package com.github.mkolisnyk.sirius.cucumber.steps;
 
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 
@@ -11,6 +12,7 @@ import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 import com.github.mkolisnyk.sirius.client.ui.controls.Edit;
 import com.udojava.evalex.Expression;
 
+import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
@@ -50,10 +52,54 @@ public class ControlSteps {
             verifyElementExists(element);
         }
     }
+    @Then("^(?:I should see |)the (?:elements|buttons|controls) with the following visibility:$")
+    public void verifyElementsWithVisibility(DataTable criteria)
+            throws Throwable {
+
+        List<Map<String, String>> content = criteria.asMaps(String.class,
+                String.class);
+        for (Map<String, String> row : content) {
+
+            String element = row.get("Element");
+            String shown = row.get("Shown");
+            Control control = Page.getCurrent().onPage(element);
+            Assert.assertNotNull("Element with the '" + element + "' alias wasn't declared on current page",
+                    control);
+            if (shown.equals("Y")) {
+                Assert.assertTrue(String.format("Element \"%s\" isn't visible", element),
+                        control.visible());
+            } else {
+                Assert.assertTrue(String.format("Element \"%s\" is unexpectly visible", element),
+                        control.invisible());
+            }
+        }
+    }
+    @Then("^(?:I should see |)at least one of the following elements is shown:$")
+    public void atLeastOneElementIsShown(List<String> elements)
+            throws Exception {
+        Control[] controls = new Control[elements.size()];
+        for (int i = 0; i < controls.length; i++) {
+            controls[i] = Page.getCurrent().onPage(elements.get(i));
+        }
+        Control control = Page.getFirstAvailableControlFromList(controls, (int) Page.getTimeout());
+        Assert.assertNotNull("None of the expected elements list was found",
+                control);
+    }
     @When("^(?:I |)note the \"(.*)\" field text as \"(.*)\"")
     public void noteControlTextAs(String list, String varName) throws Exception {
         Control control = verifyElementExists(list);
         Context.put(varName, control.getText());
+    }
+    @When("^(?:I |)note following fields values:$")
+    public void noteTheFollowingFields(DataTable criteria) throws Exception {
+        List<Map<String, String>> content = criteria.asMaps(String.class,
+                String.class);
+        for (Map<String, String> row : content) {
+            String field = row.get("Field");
+            String as = row.get("As");
+            String value = Page.getCurrent().onPage(field).getText();
+            Context.put(as, value);
+        }
     }
     @Then("^(?:I should see |)the \"(.*?)\" field value is calculated using the following formula:$")
     public void fieldValueIsCalculatedByFormula(

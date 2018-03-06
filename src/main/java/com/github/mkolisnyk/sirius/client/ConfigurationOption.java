@@ -2,7 +2,8 @@ package com.github.mkolisnyk.sirius.client;
 
 public enum ConfigurationOption {
     PLATFORM("platform"),
-    TIMEOUT("timeout");
+    TIMEOUT("timeout"),
+    PAGES_PACKAGE("pages_package");
 
     private String value;
 
