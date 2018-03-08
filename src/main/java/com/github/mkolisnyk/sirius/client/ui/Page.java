@@ -14,6 +14,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.touch.TouchActions;
 import org.openqa.selenium.remote.Augmenter;
 import org.reflections.Reflections;
 
@@ -206,8 +207,12 @@ public class Page {
         int times = 0;
         final int maxTries = 50;
         while (!currentState.equals(prevState)) {
-            ((AppiumDriver<?>) this.getDriver())
-                .swipe(startX, startY, endX, endY, seconds * DateTimeConstants.MILLIS_PER_SECOND);
+            TouchActions action = new TouchActions(driver);
+            action.scroll(scrollable.element(), endX - startX, endY - startY)
+                .pause(seconds * DateTimeConstants.MILLIS_PER_SECOND);
+            action.perform();
+            //((AppiumDriver<?>) this.getDriver())
+            //    .swipe(startX, startY, endX, endY, seconds * DateTimeConstants.MILLIS_PER_SECOND);
             if (once || times > maxTries) {
                 break;
             }
