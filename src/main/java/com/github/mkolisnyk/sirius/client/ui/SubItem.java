@@ -14,7 +14,10 @@ import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface SubItem {
     String name();
+
     String locator();
+
     Platform platform() default Platform.ANY;
+
     Class<? extends Control> controlType() default Control.class;
 }

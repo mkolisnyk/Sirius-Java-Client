@@ -12,6 +12,11 @@ import java.util.Properties;
 
 import org.joda.time.DateTimeConstants;
 
+/**
+ * 
+ * @author Mykola Kolisnyk
+ *
+ */
 public final class Configuration {
 
     private Configuration() {
@@ -19,6 +24,10 @@ public final class Configuration {
 
     private static Properties properties;
     private static String defaultConfigFile = "config.properties";
+
+    /**
+     * 
+     */
     public static void reset() {
         properties = null;
         defaultConfigFile = "config.properties";

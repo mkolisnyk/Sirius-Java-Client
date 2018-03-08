@@ -78,12 +78,13 @@ public class Page {
     public static void setCurrent(Page newPage) {
         currentPages.put(Driver.getThreadName(), newPage);
     }
-    public static Page getCurrentFromList(Class<? extends Page>[] pageClasses,
-            int tries) throws Exception {
+
+    public static Page getCurrentFromList(Class<? extends Page>[] pageClasses, int tries) throws Exception {
         return getCurrentFromList(pageClasses, tries, false);
     }
-    public static Page getCurrentFromList(Class<? extends Page>[] pageClasses,
-            int tries, boolean useCache) throws Exception {
+
+    public static Page getCurrentFromList(Class<? extends Page>[] pageClasses, int tries, boolean useCache)
+            throws Exception {
         Page[] pages = new Page[pageClasses.length];
         for (int i = 0; i < pageClasses.length; i++) {
             pages[i] = PageFactory.init(Driver.current(), pageClasses[i]);
@@ -97,8 +98,8 @@ public class Page {
         }
         return null;
     }
-    public static Control getFirstAvailableControlFromList(Control[] controls,
-            int tries) throws Exception {
+
+    public static Control getFirstAvailableControlFromList(Control[] controls, int tries) throws Exception {
         for (int i = 0; i < tries; i++) {
             for (Control control : controls) {
                 if (control.exists(1)) {
@@ -209,10 +210,11 @@ public class Page {
         while (!currentState.equals(prevState)) {
             TouchActions action = new TouchActions(driver);
             action.scroll(scrollable.element(), endX - startX, endY - startY)
-                .pause(seconds * DateTimeConstants.MILLIS_PER_SECOND);
+                    .pause(seconds * DateTimeConstants.MILLIS_PER_SECOND);
             action.perform();
-            //((AppiumDriver<?>) this.getDriver())
-            //    .swipe(startX, startY, endX, endY, seconds * DateTimeConstants.MILLIS_PER_SECOND);
+            // ((AppiumDriver<?>) this.getDriver())
+            // .swipe(startX, startY, endX, endY, seconds *
+            // DateTimeConstants.MILLIS_PER_SECOND);
             if (once || times > maxTries) {
                 break;
             }
