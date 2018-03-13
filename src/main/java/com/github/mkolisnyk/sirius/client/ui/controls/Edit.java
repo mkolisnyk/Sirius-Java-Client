@@ -5,12 +5,27 @@ import org.openqa.selenium.By;
 import com.github.mkolisnyk.sirius.client.Configuration;
 import com.github.mkolisnyk.sirius.client.ui.Page;
 
+/**
+ * 
+ * @author Mykola Kolisnyk
+ *
+ */
 public class Edit extends Control {
 
+    /**
+     * 
+     * @param parentValue
+     * @param locatorValue
+     */
     public Edit(Page parentValue, By locatorValue) {
         super(parentValue, locatorValue);
     }
 
+    /**
+     * 
+     * @param value
+     * @throws Exception
+     */
     public void setText(String value) throws Exception {
         if (Configuration.platform().isAndroidNative()) {
             this.getParent().hideKeyboard();
@@ -23,6 +38,9 @@ public class Edit extends Control {
         }
     }
 
+    /**
+     * 
+     */
     @Override
     public String getText() {
         return super.element().getAttribute("value");

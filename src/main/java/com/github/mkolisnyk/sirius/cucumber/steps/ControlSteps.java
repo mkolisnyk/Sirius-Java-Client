@@ -17,23 +17,46 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 public class ControlSteps {
+    /**
+     * 
+     * @param name
+     * @throws Exception
+     */
     @When("^(?:I |)(?:click|tap) on the \"(.*)\" (?:button|element|control)$")
     public void clickOnTheButton(String name) throws Exception {
         Control control = Page.getCurrent().onPage(name);
         Assert.assertNotNull("Unable to find the '" + name + "' element on current page.", control);
         control.click();
     }
+    /**
+     * 
+     * @param fieldName
+     * @return
+     * @throws Exception
+     */
     @Then("^(?:I should see |)the \"(.*)\" field is available$")
     public Control verifyElementExists(String fieldName) throws Exception {
         Control control = Page.getCurrent().onPage(fieldName);
         Assert.assertNotNull("Unable to find the '" + fieldName + "' element on current page.", control);
         return control;
     }
+    /**
+     * 
+     * @param text
+     * @param fieldName
+     * @throws Exception
+     */
     @When("^(?:I |)enter \"(.*)\" text into the \"(.*)\" field$")
     public void enterValue(String text, String fieldName) throws Exception {
         Edit control = (Edit) verifyElementExists(fieldName);
         control.setText(text);
     }
+    /**
+     * 
+     * @param fieldName
+     * @param text
+     * @throws Exception
+     */
     @Then("^(?:I should see |)the \"(.*)\" field contains the \"(.*)\" text$")
     public void verifyFieldText(String fieldName, String text) throws Exception {
         Control control = (Control) verifyElementExists(fieldName);
@@ -46,12 +69,22 @@ public class ControlSteps {
             ),
             text.equals(actualText) || actualText.contains(text));
     }
+    /**
+     * 
+     * @param elements
+     * @throws Exception
+     */
     @Then("^(?:I should see |)the following fields are shown:$")
     public void verifyMultipleFieldsAvailability(List<String> elements) throws Exception {
         for (String element : elements) {
             verifyElementExists(element);
         }
     }
+    /**
+     * 
+     * @param criteria
+     * @throws Throwable
+     */
     @Then("^(?:I should see |)the (?:elements|buttons|controls) with the following visibility:$")
     public void verifyElementsWithVisibility(DataTable criteria)
             throws Throwable {
@@ -74,6 +107,11 @@ public class ControlSteps {
             }
         }
     }
+    /**
+     * 
+     * @param elements
+     * @throws Exception
+     */
     @Then("^(?:I should see |)at least one of the following elements is shown:$")
     public void atLeastOneElementIsShown(List<String> elements)
             throws Exception {
@@ -85,11 +123,22 @@ public class ControlSteps {
         Assert.assertNotNull("None of the expected elements list was found",
                 control);
     }
+    /**
+     * 
+     * @param list
+     * @param varName
+     * @throws Exception
+     */
     @When("^(?:I |)note the \"(.*)\" field text as \"(.*)\"")
     public void noteControlTextAs(String list, String varName) throws Exception {
         Control control = verifyElementExists(list);
         Context.put(varName, control.getText());
     }
+    /**
+     * 
+     * @param criteria
+     * @throws Exception
+     */
     @When("^(?:I |)note following fields values:$")
     public void noteTheFollowingFields(DataTable criteria) throws Exception {
         List<Map<String, String>> content = criteria.asMaps(String.class,
@@ -101,6 +150,12 @@ public class ControlSteps {
             Context.put(as, value);
         }
     }
+    /**
+     * 
+     * @param field
+     * @param formula
+     * @throws Throwable
+     */
     @Then("^(?:I should see |)the \"(.*?)\" field value is calculated using the following formula:$")
     public void fieldValueIsCalculatedByFormula(
             String field, String formula) throws Throwable {

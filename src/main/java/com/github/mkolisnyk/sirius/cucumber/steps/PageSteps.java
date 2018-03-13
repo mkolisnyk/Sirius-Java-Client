@@ -15,6 +15,11 @@ import cucumber.api.java.en.When;
 
 public class PageSteps {
 
+    /**
+     * 
+     * @param name
+     * @throws Exception
+     */
     @Given("^I am on the \"(.*)\" (?:page|screen)$")
     @When("^(?:I |)go to the \"(.*)\" (?:page|screen)$")
     public void navigateToPage(String name) throws Exception {
@@ -23,26 +28,49 @@ public class PageSteps {
         target.navigate();
         verifyCurrentPage(name);
     }
+    /**
+     * 
+     * @param name
+     * @throws Exception
+     */
     @Then("^I should see the \"(.*)\" (?:page|screen)$")
     public void verifyCurrentPage(String name) throws Exception {
         Page target = Page.forName(name);
         Assert.assertTrue("The '" + name + "' screen is not current", target.isCurrent());
         Page.setCurrent(target);
     }
+    /**
+     * 
+     */
     @When("^(?:I |)accept the alert message$")
     public void acceptAlert() {
         Driver.current().switchTo().alert().accept();
     }
+    /**
+     * 
+     * @param text
+     * @throws Exception
+     */
     @Then("^(?:I should see |)the \"(.*)\" (?:text|label) is shown$")
     public void verifyTextPresent(String text) throws Exception {
         Assert.assertTrue("Unable to find text: '" + text + "'", Page.getCurrent().isTextPresent(text));
     }
+    /**
+     * 
+     * @param elements
+     * @throws Exception
+     */
     @Then("^(?:I should see |)the following labels are shown:$")
     public void verifyMultipleLabelsAvailability(List<String> elements) throws Exception {
         for (String element : elements) {
             verifyTextPresent(element);
         }
     }
+    /**
+     * 
+     * @param data
+     * @throws Throwable
+     */
     @When("^(?:I |)populate current page with the following data:$")
     public void populatePageWithData(DataTable data) throws Throwable {
         List<Map<String, String>> content = data.asMaps(String.class,
@@ -52,6 +80,11 @@ public class PageSteps {
             steps.enterValue(row.get("Value"), row.get("Field"));
         }
     }
+    /**
+     * 
+     * @param data
+     * @throws Throwable
+     */
     @Then("^(?:I should see |)the page contains the following data:$")
     public void pageContainsData(DataTable data) throws Throwable {
         List<Map<String, String>> content = data.asMaps(String.class,
@@ -61,6 +94,11 @@ public class PageSteps {
             steps.verifyFieldText(row.get("Field"), row.get("Value"));
         }
     }
+    /**
+     * 
+     * @param message
+     * @throws Throwable
+     */
     @When("^(?:I |)click on the \"([^\"]*)\" (?:text|label)$")
     public void clickOnText(String message) throws Throwable {
         Page.getCurrent().getTextControl(message).click();

@@ -22,6 +22,11 @@ import com.github.mkolisnyk.sirius.client.ui.SubItem;
 
 import io.appium.java_client.MobileElement;
 
+/**
+ * 
+ * @author Mykola Kolisnyk
+ *
+ */
 public class Control {
     protected static final long TIMEOUT = Configuration.timeout();
     private Page parent;
@@ -34,6 +39,11 @@ public class Control {
     private String format;
     private boolean excludeFromSearch = false;
 
+    /**
+     * 
+     * @param parentValue
+     * @param locatorValue
+     */
     public Control(Page parentValue, By locatorValue) {
         this.parent = parentValue;
         this.locator = locatorValue;
@@ -41,80 +51,159 @@ public class Control {
         subItemsMap = new HashMap<String, SubItem>();
     }
 
+    /**
+     * 
+     * @return
+     */
     public WebDriver getDriver() {
         return parent.getDriver();
     }
 
+    /**
+     * 
+     * @return
+     */
     public Page getParent() {
         return parent;
     }
 
+    /**
+     * 
+     * @return
+     */
     public By getLocator() {
         return locator;
     }
 
+    /**
+     * 
+     * @return
+     */
     public String getLocatorText() {
         return locatorText;
     }
 
+    /**
+     * 
+     * @return
+     */
     public String getItemLocatorText() {
         return itemLocatorText;
     }
 
+    /**
+     * 
+     * @param subItemLocatorText
+     */
     public void setItemLocatorText(String subItemLocatorText) {
         this.itemLocatorText = subItemLocatorText;
     }
 
+    /**
+     * 
+     * @return
+     */
     public String getScrollTo() {
         return scrollTo;
     }
 
+    /**
+     * 
+     * @param scrollToValue
+     */
     public void setScrollTo(String scrollToValue) {
         this.scrollTo = scrollToValue;
     }
 
+    /**
+     * 
+     * @return
+     */
     public ScrollTo getScrollDirection() {
         return scrollDirection;
     }
 
+    /**
+     * 
+     * @param scrollDirectionValue
+     */
     public void setScrollDirection(ScrollTo scrollDirectionValue) {
         this.scrollDirection = scrollDirectionValue;
     }
 
+    /**
+     * 
+     * @return
+     */
     public String getFormat() {
         return format;
     }
 
+    /**
+     * 
+     * @param formatValue
+     */
     public void setFormat(String formatValue) {
         this.format = formatValue;
     }
 
+    /**
+     * 
+     * @return
+     */
     public boolean isExcludeFromSearch() {
         return excludeFromSearch;
     }
 
+    /**
+     * 
+     * @param excludeFromSearchValue
+     */
     public void setExcludeFromSearch(boolean excludeFromSearchValue) {
         this.excludeFromSearch = excludeFromSearchValue;
     }
 
+    /**
+     * 
+     * @param items
+     */
     public void addSubItems(SubItem[] items) {
         for (SubItem item : items) {
             this.subItemsMap.put(item.name(), item);
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     public HashMap<String, SubItem> getSubItemsMap() {
         return subItemsMap;
     }
 
+    /**
+     * 
+     * @return
+     */
     public WebElement element() {
         return getDriver().findElement(locator);
     }
 
+    /**
+     * 
+     * @param index
+     * @return
+     */
     public WebElement element(int index) {
         return getDriver().findElements(locator).get(index);
     }
 
+    /**
+     * 
+     * @param condition
+     * @param timeout
+     * @return
+     */
     public boolean waitUntil(ExpectedCondition<?> condition, long timeout) {
         WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
         try {
@@ -125,62 +214,125 @@ public class Control {
         return true;
     }
 
+    /**
+     * 
+     * @param timeout
+     * @return
+     */
     public boolean exists(long timeout) {
         this.scrollTo();
         return waitUntil(ExpectedConditions.presenceOfElementLocated(locator), timeout);
     }
 
+    /**
+     * 
+     * @return
+     */
     public boolean exists() {
         return exists(TIMEOUT);
     }
 
+    /**
+     * 
+     * @param timeout
+     * @return
+     */
     public boolean disappears(long timeout) {
         return waitUntil(ExpectedConditions.not(ExpectedConditions.presenceOfElementLocated(locator)), timeout);
     }
 
+    /**
+     * 
+     * @return
+     */
     public boolean disappears() {
         return disappears(TIMEOUT);
     }
 
+    /**
+     * 
+     * @param timeout
+     * @return
+     */
     public boolean visible(long timeout) {
         return waitUntil(ExpectedConditions.visibilityOfElementLocated(locator), timeout);
     }
 
+    /**
+     * 
+     * @return
+     */
     public boolean visible() {
         Assert.assertTrue("Unable to find element: " + this.locator.toString(), exists());
         return visible(TIMEOUT);
     }
 
+    /**
+     * 
+     * @param timeout
+     * @return
+     */
     public boolean invisible(long timeout) {
         return waitUntil(ExpectedConditions.invisibilityOfElementLocated(locator), timeout);
     }
 
+    /**
+     * 
+     * @return
+     */
     public boolean invisible() {
         Assert.assertTrue("Unable to find element: " + this.locator.toString(), exists());
         return invisible(TIMEOUT);
     }
 
+    /**
+     * 
+     * @param timeout
+     * @return
+     */
     public boolean enabled(long timeout) {
         return waitUntil(ExpectedConditions.elementToBeClickable(locator), timeout);
     }
 
+    /**
+     * 
+     * @return
+     */
     public boolean enabled() {
         return enabled(TIMEOUT);
     }
 
+    /**
+     * 
+     * @param timeout
+     * @return
+     */
     public boolean disabled(long timeout) {
         return waitUntil(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(locator)), timeout);
     }
 
+    /**
+     * 
+     * @return
+     */
     public boolean disabled() {
         return enabled(TIMEOUT);
     }
 
+    /**
+     * 
+     */
     public void click() {
         Assert.assertTrue("Unable to find element: " + this.locator.toString(), exists());
         this.element().click();
     }
 
+    /**
+     * 
+     * @param pageClass
+     * @return
+     * @throws Exception
+     */
     public <T extends Page> T click(Class<T> pageClass) throws Exception {
         this.click();
         T page = PageFactory.init(this.getDriver(), pageClass);
@@ -190,15 +342,27 @@ public class Control {
         return page;
     }
 
+    /**
+     * 
+     * @return
+     */
     public String getText() {
         Assert.assertTrue("Unable to find element with locator: " + this.getLocator(), this.exists());
         return this.element().getText();
     }
 
+    /**
+     * 
+     * @return
+     */
     public String getValue() {
         return this.getText();
     }
 
+    /**
+     * 
+     * @return
+     */
     public Rectangle getRect() {
         this.exists();
         Rectangle rect = new Rectangle();
@@ -211,6 +375,9 @@ public class Control {
         return rect;
     }
 
+    /**
+     * 
+     */
     public void scrollTo() {
         if (this.getScrollTo() != null && !this.getScrollTo().trim().equals("")) {
             this.getParent().scrollTo(this.getScrollTo(), this.getScrollDirection());

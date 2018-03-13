@@ -15,8 +15,18 @@ import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
+/**
+ * 
+ * @author Mykola Kolisnyk
+ */
 public class TableSteps {
     private ControlSteps steps = new ControlSteps();
+    /**
+     * 
+     * @param list
+     * @param emptyState
+     * @throws Throwable
+     */
     @Then("^(?:I should see |)the \"(.*)\" (?:list|table) is (|not )empty$")
     public void verifyListEmptyState(String list, String emptyState) throws Throwable {
         boolean empty = emptyState.trim().equals("");
@@ -27,6 +37,13 @@ public class TableSteps {
             Assert.assertTrue("The '" + list + "' element is empty", control.isNotEmpty());
         }
     }
+    /**
+     * 
+     * @param firstLast
+     * @param list
+     * @param data
+     * @throws Throwable
+     */
     @Then("^(?:I should see |)the (first|last) (?:row|item) of "
             + "the \"(.*)\" (?:list|table) contains the following data:$")
     public void verifyListRowData(String firstLast, String list, DataTable data) throws Throwable {
@@ -46,6 +63,13 @@ public class TableSteps {
             }
         }
     }
+    /**
+     * 
+     * @param firstLast
+     * @param item
+     * @param list
+     * @throws Exception
+     */
     @When("^(?:I |)(?:click|tap) on the (first|last) \"(.*)\" element of the \"(.*)\" (?:list|table)$")
     public void clickOnSubItem(String firstLast, String item, String list) throws Exception {
         int index = 0;
@@ -55,11 +79,23 @@ public class TableSteps {
         }
         control.getSubItem(item, index).click();
     }
+    /**
+     * 
+     * @param list
+     * @param varName
+     * @throws Exception
+     */
     @When("^(?:I |)note the \"(.*)\" (?:table|list) (?:row|item) count as \"(.*)\"")
     public void noteRowCountAs(String list, String varName) throws Exception {
         TableView control = (TableView) steps.verifyElementExists(list);
         Context.put(varName, control.getItemsCount());
     }
+    /**
+     * 
+     * @param list
+     * @param countValue
+     * @throws Exception
+     */
     @Then("^(?:I should see |)the \"(.*)\" (?:table|list) has \"(.*)\" (?:items|rows)$")
     public void verifyTableRowCount(String list, String countValue) throws Exception {
         TableView control = (TableView) steps.verifyElementExists(list);
@@ -72,6 +108,4 @@ public class TableSteps {
         BigDecimal expectedCount = expression.setPrecision(0).eval();
         Assert.assertEquals("Unexpected row count for the '" + list + "' table", expectedCount, actualCount);
     }
-
-
 }

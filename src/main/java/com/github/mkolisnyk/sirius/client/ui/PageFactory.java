@@ -10,6 +10,10 @@ import com.github.mkolisnyk.sirius.client.Configuration;
 import com.github.mkolisnyk.sirius.client.Platform;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 
+/**
+ * 
+ * @author Mykola Kolisnyk
+ */
 public final class PageFactory {
 
     private PageFactory() {
@@ -34,6 +38,13 @@ public final class PageFactory {
         return result;
     }
 
+    /**
+     * 
+     * @param driver
+     * @param pageClass
+     * @return
+     * @throws Exception
+     */
     public static <T extends Page> T init(WebDriver driver, Class<T> pageClass) throws Exception {
         T page = pageClass.getConstructor(WebDriver.class).newInstance(driver);
         for (Field field : pageClass.getFields()) {
