@@ -16,19 +16,20 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 /**
- * 
+ * Groups steps interacting with compound elements (like tables) and their
+ * sub-elements.
  * @author Mykola Kolisnyk
  */
 public class TableSteps {
     private ControlSteps steps = new ControlSteps();
     /**
-     * 
-     * @param list
-     * @param emptyState
-     * @throws Throwable
+     * Verifies whether table is empty or not.
+     * @param list the name of the table to check.
+     * @param emptyState the fragment flagging whether we expect empty or non-empty state.
+     * @throws Exception either reflection problems (like access) or missing attributes.
      */
     @Then("^(?:I should see |)the \"(.*)\" (?:list|table) is (|not )empty$")
-    public void verifyListEmptyState(String list, String emptyState) throws Throwable {
+    public void verifyListEmptyState(String list, String emptyState) throws Exception {
         boolean empty = emptyState.trim().equals("");
         TableView control = (TableView) steps.verifyElementExists(list);
         if (empty) {
@@ -38,11 +39,11 @@ public class TableSteps {
         }
     }
     /**
-     * 
-     * @param firstLast
-     * @param list
-     * @param data
-     * @throws Throwable
+     * Checks the values of first or last row of the table.
+     * @param firstLast switch indicating whether we check first or last item.
+     * @param list the name of the table element.
+     * @param data the data table containing pairs of sub-item name and expected value.
+     * @throws Throwable either reflection problems (like access) or missing attributes.
      */
     @Then("^(?:I should see |)the (first|last) (?:row|item) of "
             + "the \"(.*)\" (?:list|table) contains the following data:$")
@@ -64,11 +65,11 @@ public class TableSteps {
         }
     }
     /**
-     * 
-     * @param firstLast
-     * @param item
-     * @param list
-     * @throws Exception
+     * Clicks on specific sub-item at the first/last row of the table specified by name.
+     * @param firstLast switch indicating whether we check first or last item.
+     * @param item the sub-item name.
+     * @param list the name of the table element.
+     * @throws Exception either reflection problems (like access) or missing attributes.
      */
     @When("^(?:I |)(?:click|tap) on the (first|last) \"(.*)\" element of the \"(.*)\" (?:list|table)$")
     public void clickOnSubItem(String firstLast, String item, String list) throws Exception {
@@ -80,10 +81,10 @@ public class TableSteps {
         control.getSubItem(item, index).click();
     }
     /**
-     * 
-     * @param list
-     * @param varName
-     * @throws Exception
+     * Stores the table row count in the context variable.
+     * @param list the name of the data table.
+     * @param varName the name of context variable to store value in.
+     * @throws Exception either reflection problems (like access) or missing attributes.
      */
     @When("^(?:I |)note the \"(.*)\" (?:table|list) (?:row|item) count as \"(.*)\"")
     public void noteRowCountAs(String list, String varName) throws Exception {
@@ -91,10 +92,10 @@ public class TableSteps {
         Context.put(varName, control.getItemsCount());
     }
     /**
-     * 
-     * @param list
-     * @param countValue
-     * @throws Exception
+     * Compares expected and actual row counts for the table specified by name.
+     * @param list the name of the table.
+     * @param countValue expected count.
+     * @throws Exception either reflection problems (like access) or missing attributes.
      */
     @Then("^(?:I should see |)the \"(.*)\" (?:table|list) has \"(.*)\" (?:items|rows)$")
     public void verifyTableRowCount(String list, String countValue) throws Exception {

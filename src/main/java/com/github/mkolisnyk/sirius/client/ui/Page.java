@@ -20,7 +20,6 @@ import org.reflections.Reflections;
 
 import com.github.mkolisnyk.sirius.client.Driver;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
-import com.github.mkolisnyk.sirius.cucumber.steps.PageSteps;
 
 import io.appium.java_client.AppiumDriver;
 
@@ -159,7 +158,7 @@ public class Page {
      * @param pageClasses the list of page classes to look in.
      * @param tries the number of iterations
      * @return the Page instance for the current page found or null if none
-     * of proposed page classes fits the current state.
+     *     of proposed page classes fits the current state.
      * @throws Exception any class conversion or null pointer exception.
      * @see {@link Page#isCurrent()}
      */
@@ -183,9 +182,9 @@ public class Page {
      * @param pageClasses the list of page classes to look in.
      * @param tries the number of iterations.
      * @param useCache (not in use at the moment) the flag identifying whether method should use
-     * cached source for verifications prior to applying to application under test directly.
+     *      cached source for verifications prior to applying to application under test directly.
      * @return the Page instance for the current page found or null if none
-     * of proposed page classes fits the current state.
+     *      of proposed page classes fits the current state.
      * @throws Exception any class conversion or null pointer exception.
      * @see {@link Page#isCurrent()}
      */
@@ -253,7 +252,7 @@ public class Page {
      * </p>
      * @return the object corresponding to the page which should be current.
      * @throws Exception any assertion or other exception which appears
-     * during page navigation processing.
+     *      during page navigation processing.
      */
     public Page navigate() throws Exception {
         return this;
@@ -352,13 +351,13 @@ public class Page {
      * Overloaded version of {@link Page#swipeScreen(boolean, boolean, boolean, int)}
      * where the scrolling time is set to 2 seconds.
      * @param vertical flag indicating if scroll should be vertical. If false,
-     *  the scrolling is horizontal.
+     *      the scrolling is horizontal.
      * @param leftTop the direction of scrolling. If true, the scroll will be performed to the left or top
-     *  depending on the <b>vertical</b> flag.
+     *      depending on the <b>vertical</b> flag.
      * @param once flag identifying whether scrolling should be done once or until the end
-     *  of the page is reached (if false).
+     *      of the page is reached (if false).
      * @return true is scrolling was completed. If false, the operation cannot be performed
-     *  due to scrollable element unavailability.
+     *      due to scrollable element unavailability.
      * @see Page#swipeScreen(boolean, boolean, boolean, int)
      */
     public boolean swipeScreen(boolean vertical, boolean leftTop, boolean once) {
@@ -381,14 +380,14 @@ public class Page {
      * <b>NOTE:</b> applicable for Android only.
      * </p>
      * @param vertical flag indicating if scroll should be vertical. If false,
-     *  the scrolling is horizontal.
+     *      the scrolling is horizontal.
      * @param leftTop the direction of scrolling. If true, the scroll will be performed to the left or top
-     *  depending on the <b>vertical</b> flag.
+     *      depending on the <b>vertical</b> flag.
      * @param once flag identifying whether scrolling should be done once or until the end
-     *  of the page is reached (if false).
+     *      of the page is reached (if false).
      * @param seconds the number of seconds for scrolling operation.
      * @return true is scrolling was completed. If false, the operation cannot be performed
-     *  due to scrollable element unavailability.
+     *      due to scrollable element unavailability.
      */
     public boolean swipeScreen(boolean vertical, boolean leftTop, boolean once, int seconds) {
         Control scrollable = getScrollable();
@@ -488,9 +487,9 @@ public class Page {
      * <b>NOTE:</b> applicable for Android only.
      * </p>
      * @param up flag identifying if scrolling should be performed to the top (if true)
-     *  or the bottom (if false) of the page.
+     *      or the bottom (if false) of the page.
      * @return true is scrolling was completed. If false, the operation cannot be performed
-     *  due to scrollable element unavailability.
+     *      due to scrollable element unavailability.
      * @throws Exception any assertion or other exception which can happen during operaiton.
      */
     public boolean scrollTo(boolean up) throws Exception {
@@ -509,7 +508,7 @@ public class Page {
      * </p>
      * @param control the control object to scroll to.
      * @param scrollDirection general trajectory to search for specified element.
-     *  Please, refer to the {@link ScrollTo} enumeration description.
+     *      Please, refer to the {@link ScrollTo} enumeration description.
      * @return if true, the control to scroll to is now visible on the screen. False - otherwise.
      * @see ScrollTo
      */
@@ -566,7 +565,7 @@ public class Page {
      * </p>
      * @param text the text to scroll to.
      * @param scrollDirection general trajectory to search for specified element.
-     *  Please, refer to the {@link ScrollTo} enumeration description.
+     *      Please, refer to the {@link ScrollTo} enumeration description.
      * @return if true, the text to scroll to is now visible on the screen. False - otherwise.
      * @see ScrollTo
      */
@@ -796,7 +795,7 @@ public class Page {
      * </p>
      * @param name the logical name of the control to get from current page object.
      * @return the control corresponding to the logical name passed as the parameter
-     *  or <b>null</b> if no such element found.
+     *     or <b>null</b> if no such element found.
      * @throws Exception either reflection problems (like access) or missing attributes.
      * @see Alias
      */

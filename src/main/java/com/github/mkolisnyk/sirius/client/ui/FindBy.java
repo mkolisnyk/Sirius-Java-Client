@@ -7,7 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.github.mkolisnyk.sirius.client.Platform;
-import com.github.mkolisnyk.sirius.client.ui.controls.TableView;
 
 /**
  * <p>

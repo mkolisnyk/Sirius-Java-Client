@@ -16,11 +16,16 @@ import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
+/**
+ * Group of Cucumber-JVM keywords which are targeted to separate controls.
+ * @author Mykola Kolisnyk
+ */
 public class ControlSteps {
     /**
-     * 
-     * @param name
-     * @throws Exception
+     * Performs the click on the element specified by name on current page.
+     * Element name is defined using Alias.
+     * @param name the element name to click on.
+     * @throws Exception either reflection problems (like access) or missing attributes.
      */
     @When("^(?:I |)(?:click|tap) on the \"(.*)\" (?:button|element|control)$")
     public void clickOnTheButton(String name) throws Exception {
@@ -29,10 +34,10 @@ public class ControlSteps {
         control.click();
     }
     /**
-     * 
-     * @param fieldName
-     * @return
-     * @throws Exception
+     * Verifies if element specified by name exists on current page.
+     * @param fieldName the name of the field to check existence of.
+     * @return the control object (if it exists).
+     * @throws Exception either reflection problems (like access) or missing attributes.
      */
     @Then("^(?:I should see |)the \"(.*)\" field is available$")
     public Control verifyElementExists(String fieldName) throws Exception {
@@ -41,10 +46,10 @@ public class ControlSteps {
         return control;
     }
     /**
-     * 
-     * @param text
-     * @param fieldName
-     * @throws Exception
+     * Enters the text into the text field specified by name.
+     * @param text text to enter.
+     * @param fieldName the name of the field.
+     * @throws Exception either reflection problems (like access) or missing attributes.
      */
     @When("^(?:I |)enter \"(.*)\" text into the \"(.*)\" field$")
     public void enterValue(String text, String fieldName) throws Exception {
@@ -52,10 +57,10 @@ public class ControlSteps {
         control.setText(text);
     }
     /**
-     * 
-     * @param fieldName
-     * @param text
-     * @throws Exception
+     * Verifies that the field specified by the name contains some specific text.
+     * @param fieldName the name of the field to check the text of.
+     * @param text the expected part of the text.
+     * @throws Exception either reflection problems (like access) or missing attributes.
      */
     @Then("^(?:I should see |)the \"(.*)\" field contains the \"(.*)\" text$")
     public void verifyFieldText(String fieldName, String text) throws Exception {
@@ -70,9 +75,9 @@ public class ControlSteps {
             text.equals(actualText) || actualText.contains(text));
     }
     /**
-     * 
-     * @param elements
-     * @throws Exception
+     * Verifies that all elements listed in parameters table are available on the page.
+     * @param elements the list of elements to check.
+     * @throws Exception either reflection problems (like access) or missing attributes.
      */
     @Then("^(?:I should see |)the following fields are shown:$")
     public void verifyMultipleFieldsAvailability(List<String> elements) throws Exception {
@@ -81,9 +86,9 @@ public class ControlSteps {
         }
     }
     /**
-     * 
-     * @param criteria
-     * @throws Throwable
+     * Checks multiple state of multiple elements.
+     * @param criteria the data table showing multiple fields criteria.
+     * @throws Throwable either reflection problems (like access) or missing attributes.
      */
     @Then("^(?:I should see |)the (?:elements|buttons|controls) with the following visibility:$")
     public void verifyElementsWithVisibility(DataTable criteria)
@@ -108,9 +113,9 @@ public class ControlSteps {
         }
     }
     /**
-     * 
-     * @param elements
-     * @throws Exception
+     * Checks whether at least one of the elements is available.
+     * @param elements the list of elements to check availability for.
+     * @throws Exception either reflection problems (like access) or missing attributes.
      */
     @Then("^(?:I should see |)at least one of the following elements is shown:$")
     public void atLeastOneElementIsShown(List<String> elements)
@@ -124,20 +129,20 @@ public class ControlSteps {
                 control);
     }
     /**
-     * 
-     * @param list
-     * @param varName
-     * @throws Exception
+     * Stores the field value in the context variable.
+     * @param field the name of the field to get value from.
+     * @param varName variable name to store field value to.
+     * @throws Exception either reflection problems (like access) or missing attributes.
      */
     @When("^(?:I |)note the \"(.*)\" field text as \"(.*)\"")
-    public void noteControlTextAs(String list, String varName) throws Exception {
-        Control control = verifyElementExists(list);
+    public void noteControlTextAs(String field, String varName) throws Exception {
+        Control control = verifyElementExists(field);
         Context.put(varName, control.getText());
     }
     /**
-     * 
-     * @param criteria
-     * @throws Exception
+     * Stores multiple fields in multiple variables.
+     * @param criteria the data table containing field names and variable names.
+     * @throws Exception either reflection problems (like access) or missing attributes.
      */
     @When("^(?:I |)note following fields values:$")
     public void noteTheFollowingFields(DataTable criteria) throws Exception {
@@ -151,10 +156,13 @@ public class ControlSteps {
         }
     }
     /**
-     * 
-     * @param field
-     * @param formula
-     * @throws Throwable
+     * Calculates formula and compares value with the value of specific field.
+     * Formula is calculated in numeric way with some precision. The formula may contain
+     * either field names or context variables or constant numeric values combined
+     * with various arithmetic operations.
+     * @param field the name of the field to compare data with.
+     * @param formula the formula to calculate expected value.
+     * @throws Throwable either reflection problems (like access) or missing attributes.
      */
     @Then("^(?:I should see |)the \"(.*?)\" field value is calculated using the following formula:$")
     public void fieldValueIsCalculatedByFormula(

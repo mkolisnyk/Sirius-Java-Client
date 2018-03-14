@@ -36,6 +36,10 @@ or from Gradle:
 compile group: 'com.github.mkolisnyk', name: 'sirius-java-client', version: '0.0.1'
 ```
 
+## Javadoc
+
+Javadoc pages can be found [here](/sirius-java-client/javadoc/)
+
 ## Examples
 
 ## Authors

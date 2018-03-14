@@ -349,7 +349,7 @@ public class Control {
      * @param pageClass the page class corresponding to the page to appear after click.
      * @param <T> the class of expected page object.
      * @return the initialized page object corresponding to the page which should appear
-     * after the click on current element.
+     *     after the click on current element.
      * @throws Exception any exception when some attributes are missing.
      */
     public <T extends Page> T click(Class<T> pageClass) throws Exception {
