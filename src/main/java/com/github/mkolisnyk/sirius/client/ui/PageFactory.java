@@ -11,7 +11,8 @@ import com.github.mkolisnyk.sirius.client.Platform;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 
 /**
- * 
+ * The global object which is responsible for proper {@link Page} instance
+ * initialization.
  * @author Mykola Kolisnyk
  */
 public final class PageFactory {
@@ -39,11 +40,14 @@ public final class PageFactory {
     }
 
     /**
-     * 
-     * @param driver
-     * @param pageClass
-     * @return
-     * @throws Exception
+     * Major method which initialises page object instance based on WebDriver and page class
+     * provided. It processes all page and control related annotations and initialises all
+     * control fields.
+     * @param driver the WebDriver instance to pass to new page object instance.
+     * @param pageClass the page class which instance should be created.
+     * @param <T> the class of returning instance.
+     * @return initialised page class instance where all control fields are initialised and ready to use.
+     * @throws Exception mainly related to missing attributes of the fields to process.
      */
     public static <T extends Page> T init(WebDriver driver, Class<T> pageClass) throws Exception {
         T page = pageClass.getConstructor(WebDriver.class).newInstance(driver);

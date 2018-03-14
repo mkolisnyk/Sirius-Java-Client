@@ -10,7 +10,7 @@ import com.github.mkolisnyk.sirius.client.Platform;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 
 /**
- * 
+ * Annotation which is used for complex elements processing.
  * @author Mykola Kolisnyk
  */
 @Target(ElementType.FIELD)
@@ -18,23 +18,23 @@ import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface SubItem {
     /**
-     * 
-     * @return
+     * The sub-item name.
+     * @return The sub-item name.
      */
     String name();
     /**
-     * 
-     * @return
+     * Locator string for sub-item. It is the part of the entire locator.
+     * @return Locator string for sub-item.
      */
     String locator();
     /**
-     * 
-     * @return
+     * The flag identifying target platform.
+     * @return target platform.
      */
     Platform platform() default Platform.ANY;
     /**
-     * 
-     * @return
+     * The class of the control object to cast sub-item element to.
+     * @return the sub-item control type.
      */
     Class<? extends Control> controlType() default Control.class;
 }

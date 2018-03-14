@@ -274,9 +274,9 @@ public class Page {
     }
 
     /**
-     * 
-     * @return
-     * @throws IOException
+     * Captures the screenshot of current page.
+     * @return The byte array containing image data.
+     * @throws IOException I/O problems while retrieving the image data.
      */
     public byte[] captureScreenShot() throws IOException {
         WebDriver augmentedDriver = new Augmenter().augment(this.getDriver());
@@ -285,10 +285,10 @@ public class Page {
     }
 
     /**
-     * 
-     * @param destination
-     * @return
-     * @throws IOException
+     * Captures the screenshot of current page and stores it in the file.
+     * @param destination the destination path of the screenshot.
+     * @return the {@link File} object referencing to generated file.
+     * @throws IOException I/O problems.
      */
     public File captureScreenShot(String destination) throws IOException {
         WebDriver augmentedDriver = new Augmenter().augment(this.getDriver());
@@ -299,16 +299,22 @@ public class Page {
     }
 
     /**
-     * 
-     * @return
+     * Gets the page source code. Usually it is page HTML (for web) or at least some
+     * XML representation (for WebDriver implementation for other platforms).
+     * @return current page source.
      */
     public String getSource() {
         return this.getDriver().getPageSource();
     }
 
     /**
-     * 
-     * @return
+     * <p>
+     * Returns element which is available for scrolling. By default, it's first scrollable element.
+     * </p>
+     * <p>
+     * <b>NOTE:</b> currently, it is applicable for Android platform only.
+     * </p>
+     * @return control object which can be used for scrolling.
      */
     public Control getScrollable() {
         Control scrollable = new Control(this, By.xpath("(//*[@scrollable='true'])[1]"));
@@ -316,9 +322,11 @@ public class Page {
     }
 
     /**
-     * 
-     * @param message
-     * @return
+     * Dynamically generates control object which corresponds to the element
+     * containing text specified by the parameter.
+     * @param message the text the control should contain.
+     * @return the control with the text containing specified message parameter.
+     * @see Page#isTextPresent(String)
      */
     public Control getTextControl(String message) {
         Control text = null;
@@ -330,8 +338,8 @@ public class Page {
     }
 
     /**
-     * 
-     * @return
+     * Returns the size of the entire screen.
+     * @return the rectangle structure with screen dimensions.
      */
     private static Rectangle getScreenSize() {
         Rectangle area = new Rectangle();
@@ -341,23 +349,46 @@ public class Page {
     }
 
     /**
-     * 
-     * @param vertical
-     * @param leftTop
-     * @param once
-     * @return
+     * Overloaded version of {@link Page#swipeScreen(boolean, boolean, boolean, int)}
+     * where the scrolling time is set to 2 seconds.
+     * @param vertical flag indicating if scroll should be vertical. If false,
+     *  the scrolling is horizontal.
+     * @param leftTop the direction of scrolling. If true, the scroll will be performed to the left or top
+     *  depending on the <b>vertical</b> flag.
+     * @param once flag identifying whether scrolling should be done once or until the end
+     *  of the page is reached (if false).
+     * @return true is scrolling was completed. If false, the operation cannot be performed
+     *  due to scrollable element unavailability.
+     * @see Page#swipeScreen(boolean, boolean, boolean, int)
      */
     public boolean swipeScreen(boolean vertical, boolean leftTop, boolean once) {
         return swipeScreen(vertical, leftTop, once, 2);
     }
 
     /**
-     * 
-     * @param vertical
-     * @param leftTop
-     * @param once
-     * @param seconds
-     * @return
+     * <p>
+     * Performs scrolling operation which scrolls to the size of visible screen.
+     * This is the most common method for such operation and it also controls
+     * whether we should perform vertical/horizontal scrolling as well as the
+     * direction (left-to-right, top-bottom or vice versa).
+     * </p>
+     * <p>
+     * Additionally it controls the number of swipe operations. Method performs
+     * scrolling wither till the end of the page or just once. This is controlled by
+     * dedicated flag.
+     * </p>
+     * <p>
+     * <b>NOTE:</b> applicable for Android only.
+     * </p>
+     * @param vertical flag indicating if scroll should be vertical. If false,
+     *  the scrolling is horizontal.
+     * @param leftTop the direction of scrolling. If true, the scroll will be performed to the left or top
+     *  depending on the <b>vertical</b> flag.
+     * @param once flag identifying whether scrolling should be done once or until the end
+     *  of the page is reached (if false).
+     * @param seconds the number of seconds for scrolling operation.
+     * @return true is scrolling was completed. If false, the operation cannot be performed
+     *  due to scrollable element unavailability.
      */
     public boolean swipeScreen(boolean vertical, boolean leftTop, boolean once, int seconds) {
         Control scrollable = getScrollable();
@@ -419,10 +450,15 @@ public class Page {
     }
 
     /**
-     * 
-     * @param control
-     * @param up
-     * @return
+     * <p>
+     * Swipes screen till specific control appears.
+     * </p>
+     * <p>
+     * <b>NOTE:</b> applicable for Android only.
+     * </p>
+     * @param control the control object to scroll to.
+     * @param up flag identifying if scrolling should be done into top.
+     * @return if true, the control to scroll to is now visible on the screen. False - otherwise.
      */
     public boolean scrollTo(Control control, boolean up) {
         if (control.exists(TINY_TIMEOUT)) {
@@ -445,20 +481,37 @@ public class Page {
     }
 
     /**
-     * 
-     * @param up
-     * @return
-     * @throws Exception
+     * <p>
+     * Swipes screen to the upper/lower limit of the page.
+     * </p>
+     * <p>
+     * <b>NOTE:</b> applicable for Android only.
+     * </p>
+     * @param up flag identifying if scrolling should be performed to the top (if true)
+     *  or the bottom (if false) of the page.
+     * @return true is scrolling was completed. If false, the operation cannot be performed
+     *  due to scrollable element unavailability.
+     * @throws Exception any assertion or other exception which can happen during operaiton.
      */
     public boolean scrollTo(boolean up) throws Exception {
         return swipeScreen(true, up, false);
     }
 
     /**
-     * 
-     * @param control
-     * @param scrollDirection
-     * @return
+     * <p>
+     * Swipes screen till specific control appears. Unlike {@link Page#scrollTo(Control, boolean)}
+     * method, this method defines general trajectory of scrolling. E.g. we may search for specific control
+     * either by scrolling only to top/bottom of the screen or we may define that we should swipe to the top
+     * first and then to the bottom.
+     * </p>
+     * <p>
+     * <b>NOTE:</b> applicable for Android only.
+     * </p>
+     * @param control the control object to scroll to.
+     * @param scrollDirection general trajectory to search for specified element.
+     *  Please, refer to the {@link ScrollTo} enumeration description.
+     * @return if true, the control to scroll to is now visible on the screen. False - otherwise.
+     * @see ScrollTo
      */
     public boolean scrollTo(Control control, ScrollTo scrollDirection) {
         switch (scrollDirection) {
@@ -476,32 +529,46 @@ public class Page {
     }
 
     /**
-     * 
-     * @param control
-     * @return
-     * @throws Exception
+     * Overloaded {@link Page#scrollTo(Control, ScrollTo)} method which looks
+     * for control by scrolling to the top of the screen first and then to the bottom.
+     * @param control the control object to scroll to.
+     * @return if true, the control to scroll to is now visible on the screen. False - otherwise.
      */
-    public boolean scrollTo(Control control) throws Exception {
+    public boolean scrollTo(Control control) {
         return scrollTo(control, ScrollTo.TOP_BOTTOM);
     }
 
     /**
-     * 
-     * @param text
-     * @param up
-     * @return
-     * @throws Exception
+     * <p>
+     * Swipes screen till specific text appears.
+     * </p>
+     * <p>
+     * <b>NOTE:</b> applicable for Android only.
+     * </p>
+     * @param text the text to scroll to.
+     * @param up flag identifying if scrolling should be done into top.
+     * @return if true, the text to scroll to is now visible on the screen. False - otherwise.
      */
-    public boolean scrollTo(String text, boolean up) throws Exception {
+    public boolean scrollTo(String text, boolean up) {
         Control control = this.getTextControl(text);
         return this.scrollTo(control, up);
     }
 
     /**
-     * 
-     * @param text
-     * @param scrollDirection
-     * @return
+     * <p>
+     * Swipes screen till specific text appears. Unlike {@link Page#scrollTo(String, boolean)}
+     * method, this method defines general trajectory of scrolling. E.g. we may search for specific control
+     * either by scrolling only to top/bottom of the screen or we may define that we should swipe to the top
+     * first and then to the bottom.
+     * </p>
+     * <p>
+     * <b>NOTE:</b> applicable for Android only.
+     * </p>
+     * @param text the text to scroll to.
+     * @param scrollDirection general trajectory to search for specified element.
+     *  Please, refer to the {@link ScrollTo} enumeration description.
+     * @return if true, the text to scroll to is now visible on the screen. False - otherwise.
+     * @see ScrollTo
      */
     public boolean scrollTo(String text, ScrollTo scrollDirection) {
         Control control = this.getTextControl(text);
@@ -509,16 +576,22 @@ public class Page {
     }
 
     /**
-     * 
-     * @param text
-     * @return
+     * Overloaded {@link Page#scrollTo(String, ScrollTo)} method which looks
+     * for text by scrolling to the top of the screen first and then to the bottom.
+     * @param text the text to scroll to.
+     * @return if true, the text to scroll to is now visible on the screen. False - otherwise.
      */
     public boolean scrollTo(String text) {
         return scrollTo(text, ScrollTo.TOP_BOTTOM);
     }
 
     /**
-     * 
+     * <p>
+     * Forcibly hides the virtual keyboard.
+     * </p>
+     * <p>
+     * <b>NOTE:</b> applicable for Android only.
+     * </p>
      */
     public void hideKeyboard() {
         try {
@@ -529,10 +602,23 @@ public class Page {
     }
 
     /**
-     * 
-     * @param timeoutValue
-     * @return
-     * @throws Exception
+     * <p>
+     * Checks if the actual page observed from application under test corresponds
+     * to current page class instance. Mainly, the method waits for all controls
+     * declared in current page class to appear on the current page.
+     * </p>
+     * <p>
+     * In some cases there can be elements which are declared on the page class but may not
+     * be available on screen immediately. It can be related to dynamic elements which
+     * appear after some event on the page or simply by the fact that actual object isn't visible
+     * on screen as it happens for Android. In order to handle such situation the <b>isCurrent</b>
+     * method also checks if {@link FindBy#excludeFromSearch()} flag for each specific element
+     * is set to <b>true</b>. If so, the corresponding control is not participating in check.
+     * </p>
+     * @param timeoutValue the timeout to wait for each element to appear.
+     * @return true if all searched control on current page object are actually present.
+     * @throws Exception mainly related to reflection problems when some control attributes are missing.
+     * @see {@link FindBy#excludeFromSearch()}
      */
     public boolean isCurrent(long timeoutValue) throws Exception {
         Field[] fields = this.getClass().getFields();
@@ -548,9 +634,9 @@ public class Page {
     }
 
     /**
-     * 
-     * @return
-     * @throws Exception
+     * Overloaded version of {@link Page#isCurrent(long)} which waits for page during default timeout.
+     * @return true if all searched control on current page object are actually present.
+     * @throws Exception mainly related to reflection problems when some control attributes are missing.
      */
     public boolean isCurrent() throws Exception {
         return isCurrent(getTimeout());
@@ -575,130 +661,144 @@ public class Page {
     }
 
     /**
-     * 
-     * @param elements
-     * @return
-     * @throws Exception
+     * Checks whether all elements passed as parameter exist.
+     * @param elements the list of elements to check.
+     * @return true if condition is met. False - otherwise.
+     * @throws Exception reflection related errors.
      */
     public boolean allElementsExist(Control[] elements) throws Exception {
         return allElementsAre(elements, "exists");
     }
 
     /**
-     * 
-     * @param elements
-     * @return
-     * @throws Exception
+     * Checks whether all elements passed as parameter do not exist.
+     * @param elements the list of elements to check.
+     * @return true if condition is met. False - otherwise.
+     * @throws Exception reflection related errors.
      */
     public boolean allElementsDoNotExist(Control[] elements) throws Exception {
         return allElementsAre(elements, "disappears");
     }
 
     /**
-     * 
-     * @param elements
-     * @return
-     * @throws Exception
+     * Checks whether all elements passed as parameter are visible.
+     * @param elements the list of elements to check.
+     * @return true if condition is met. False - otherwise.
+     * @throws Exception reflection related errors.
      */
     public boolean allElementsAreVisible(Control[] elements) throws Exception {
         return allElementsAre(elements, "visible");
     }
 
     /**
-     * 
-     * @param elements
-     * @return
-     * @throws Exception
+     * Checks whether all elements passed as parameter are in invisible state.
+     * @param elements the list of elements to check.
+     * @return true if condition is met. False - otherwise.
+     * @throws Exception reflection related errors.
      */
     public boolean allElementsAreInvisible(Control[] elements) throws Exception {
         return allElementsAre(elements, "invisible");
     }
 
     /**
-     * 
-     * @param elements
-     * @return
-     * @throws Exception
+     * Checks whether all elements passed as parameter are at enabled state.
+     * @param elements the list of elements to check.
+     * @return true if condition is met. False - otherwise.
+     * @throws Exception reflection related errors.
      */
     public boolean allElementsAreEnabled(Control[] elements) throws Exception {
         return allElementsAre(elements, "enabled");
     }
 
     /**
-     * 
-     * @param elements
-     * @return
-     * @throws Exception
+     * Checks whether all elements passed as parameter are at disabled state.
+     * @param elements the list of elements to check.
+     * @return true if condition is met. False - otherwise.
+     * @throws Exception reflection related errors.
      */
     public boolean allElementsAreDisabled(Control[] elements) throws Exception {
         return allElementsAre(elements, "disabled");
     }
 
     /**
-     * 
-     * @param elements
-     * @return
-     * @throws Exception
+     * Checks if at least one of the elements passed as the parameter exists.
+     * @param elements the list of elements to check.
+     * @return true if condition is met. False - otherwise.
+     * @throws Exception reflection related errors.
      */
     public boolean anyOfElementsExist(Control[] elements) throws Exception {
         return anyOfElementsIs(elements, "exists");
     }
 
     /**
-     * 
-     * @param elements
-     * @return
-     * @throws Exception
+     * Checks if at least one of the elements passed as the parameter doesn't exist.
+     * @param elements the list of elements to check.
+     * @return true if condition is met. False - otherwise.
+     * @throws Exception reflection related errors.
      */
     public boolean anyOfElementsDoNotExist(Control[] elements) throws Exception {
         return anyOfElementsIs(elements, "disappears");
     }
 
     /**
-     * 
-     * @param elements
-     * @return
-     * @throws Exception
+     * Checks if at least one of the elements passed as the parameter is visible.
+     * @param elements the list of elements to check.
+     * @return true if condition is met. False - otherwise.
+     * @throws Exception reflection related errors.
      */
     public boolean anyOfElementsIsVisible(Control[] elements) throws Exception {
         return anyOfElementsIs(elements, "visible");
     }
 
     /**
-     * 
-     * @param elements
-     * @return
-     * @throws Exception
+     * Checks if at least one of the elements passed as the parameter is invisible.
+     * @param elements the list of elements to check.
+     * @return true if condition is met. False - otherwise.
+     * @throws Exception reflection related errors.
      */
     public boolean anyOfElementsIsInvisible(Control[] elements) throws Exception {
         return anyOfElementsIs(elements, "invisible");
     }
 
     /**
-     * 
-     * @param elements
-     * @return
-     * @throws Exception
+     * Checks if at least one of the elements passed as the parameter is enabled.
+     * @param elements the list of elements to check.
+     * @return true if condition is met. False - otherwise.
+     * @throws Exception reflection related errors.
      */
     public boolean anyOfElementsIsEnabled(Control[] elements) throws Exception {
         return anyOfElementsIs(elements, "enabled");
     }
 
     /**
-     * 
-     * @param elements
-     * @return
-     * @throws Exception
+     * Checks if at least one of the elements passed as the parameter is disabled.
+     * @param elements the list of elements to check.
+     * @return true if condition is met. False - otherwise.
+     * @throws Exception reflection related errors.
      */
     public boolean anyOfElementsIsDisabled(Control[] elements) throws Exception {
         return anyOfElementsIs(elements, "disabled");
     }
 
     /**
-     * 
-     * @param name
-     * @return
-     * @throws Exception
+     * <p>
+     * Gets the current page class control with logical name specified.
+     * </p>
+     * <p>
+     * Mainly it goes through all fields of current page class and checks
+     * only fields which are of {@link Control} class or any extended classes.
+     * For each of such control objects the method gets the {@link Alias}
+     * annotation and gets it value.
+     * </p>
+     * <p>
+     * If this value equals the name specified as the
+     * parameter the corresponding control is returned.
+     * </p>
+     * @param name the logical name of the control to get from current page object.
+     * @return the control corresponding to the logical name passed as the parameter
+     *  or <b>null</b> if no such element found.
+     * @throws Exception either reflection problems (like access) or missing attributes.
+     * @see Alias
      */
     public Control onPage(String name) throws Exception {
         for (Field field : this.getClass().getFields()) {
