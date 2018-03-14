@@ -38,7 +38,7 @@ compile group: 'com.github.mkolisnyk', name: 'sirius-java-client', version: '0.0
 
 ## Javadoc
 
-Javadoc pages can be found [here](/sirius-java-client/javadoc/)
+Javadoc pages can be found [here](/Sirius-Java-Client/javadoc/)
 
 ## Examples
 
