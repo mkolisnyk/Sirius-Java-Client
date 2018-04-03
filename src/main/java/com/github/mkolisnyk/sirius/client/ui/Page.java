@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTimeConstants;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
@@ -20,6 +21,7 @@ import org.reflections.Reflections;
 
 import com.github.mkolisnyk.sirius.client.Driver;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
+import com.github.mkolisnyk.sirius.client.ui.controls.ExpectedState;
 
 import io.appium.java_client.AppiumDriver;
 
@@ -29,12 +31,12 @@ import io.appium.java_client.AppiumDriver;
  * @author Mykola Kolisnyk
  */
 public class Page {
-    private static final long TINY_TIMEOUT = 1;
-    private static final long SHORT_TIMEOUT = 5;
+    private static final int TINY_TIMEOUT = 1;
+    private static final int SHORT_TIMEOUT = 5;
     private static final int SCROLL_TOP_PART = 9;
     private static final int SCROLL_TOTAL_PARTS = 10;
-    private static final long DEFAULT_TIMEOUT = 60L;
-    private static long timeout = DEFAULT_TIMEOUT;
+    private static final int DEFAULT_TIMEOUT = 60;
+    private static int timeout = DEFAULT_TIMEOUT;
     private static ConcurrentHashMap<String, Page> currentPages = new ConcurrentHashMap<String, Page>();
     private static String defaultPagesPackage = "";
 
@@ -55,7 +57,7 @@ public class Page {
      * This is explicit waiting timeout which is used to wait for some event to happen.
      * @return currently set timeout.
      */
-    public static long getTimeout() {
+    public static int getTimeout() {
         return timeout;
     }
 
@@ -63,7 +65,7 @@ public class Page {
      * Assigns new timeout value.
      * @param timeoutValue new timeout value.
      */
-    public static void setTimeout(long timeoutValue) {
+    public static void setTimeout(int timeoutValue) {
         Page.timeout = timeoutValue;
     }
 
@@ -619,7 +621,7 @@ public class Page {
      * @throws Exception mainly related to reflection problems when some control attributes are missing.
      * @see {@link FindBy#excludeFromSearch()}
      */
-    public boolean isCurrent(long timeoutValue) throws Exception {
+    public boolean isCurrent(int timeoutValue) throws Exception {
         Field[] fields = this.getClass().getFields();
         for (Field field : fields) {
             if (Control.class.isAssignableFrom(field.getType())) {
@@ -809,5 +811,58 @@ public class Page {
             }
         }
         return null;
+    }
+    /**
+     * <p>
+     * Gets the current page class control with logical name specified.
+     * </p>
+     * <p>
+     * Mainly it goes through all fields of current page class and checks
+     * only fields which are of {@link Control} class or any extended classes.
+     * For each of such control objects the method gets the {@link Alias}
+     * annotation and gets it value.
+     * </p>
+     * <p>
+     * If this value equals the name specified as the
+     * parameter the corresponding control is returned.
+     * </p>
+     * @param <T> the type of returning control.
+     * @param name the logical name of the control to get from current page object.
+     * @param controlType the type of returning control.
+     * @return the control corresponding to the logical name passed as the parameter
+     *     or <b>null</b> if no such element found.
+     * @throws Exception either reflection problems (like access) or missing attributes.
+     * @see Alias
+     */
+    public <T extends Control> T onPage(String name, Class<T> controlType) throws Exception {
+        for (Field field : this.getClass().getFields()) {
+            if (controlType.isAssignableFrom(field.getType())) {
+                Alias alias = field.getAnnotation(Alias.class);
+                if (alias != null && name.equals(alias.value())) {
+                    return (T) field.get(this);
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Checks some state of page depending on predicate specified.
+     * @param predicate {@link ExpectedState} expression returning boolean state value.
+     * @return true if condition is met, false - otherwise.
+     */
+    public boolean is(ExpectedState<Boolean, Page> predicate) {
+        return predicate.apply(this);
+    }
+
+    /**
+     * Verifies that page has some specific state and asserts the error if condition is not met.
+     * @param predicate {@link ExpectedState} expression returning boolean state value.
+     * @return current control.
+     */
+    public Page verify(ExpectedState<Boolean, Page> predicate) {
+        Assert.assertTrue("Unable to verify that " + predicate.description(this),
+                is(predicate));
+        return this;
     }
 }

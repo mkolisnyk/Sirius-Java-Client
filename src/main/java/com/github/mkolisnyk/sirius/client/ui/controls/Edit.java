@@ -24,8 +24,9 @@ public class Edit extends Control {
     /**
      * Enters the text into the field.
      * @param value the text to enter.
+     * @return current control to continue chain operations.
      */
-    public void setText(String value) {
+    public Control setText(String value) {
         if (Configuration.platform().isAndroidNative()) {
             this.getParent().hideKeyboard();
         }
@@ -35,6 +36,7 @@ public class Edit extends Control {
         if (Configuration.platform().isAndroidNative()) {
             this.getParent().hideKeyboard();
         }
+        return this;
     }
 
     @Override

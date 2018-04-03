@@ -53,7 +53,7 @@ public class TableView extends Control {
      * @param timeout time limit to wait.
      * @return true - element contains items, false - otherwise.
      */
-    public boolean isNotEmpty(long timeout) {
+    public boolean isNotEmpty(int timeout) {
         return this.getItem(0).exists(timeout);
     }
 
@@ -63,14 +63,14 @@ public class TableView extends Control {
      * @return true - element contains items, false - otherwise.
      */
     public boolean isNotEmpty() {
-        return isNotEmpty(TIMEOUT);
+        return isNotEmpty(Page.getTimeout());
     }
     /**
      * Checks if current compound element doesn't contains any items.
      * @param timeout time limit to wait.
      * @return true - element doesn't contain items, false - otherwise.
      */
-    public boolean isEmpty(long timeout) {
+    public boolean isEmpty(int timeout) {
         return this.getItem(0).disappears(timeout);
     }
 
@@ -80,7 +80,7 @@ public class TableView extends Control {
      * @return true - element doesn't contain items, false - otherwise.
      */
     public boolean isEmpty() {
-        return isEmpty(TIMEOUT);
+        return isEmpty(Page.getTimeout());
     }
 
     /**

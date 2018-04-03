@@ -23,6 +23,12 @@ public class HomePage extends Page {
     @FindBy(locator = "//button[text() = 'Bank Manager Login']")
     public Control buttonBankManagerLogin;
     
+    @Override
+    public Page navigate() throws Exception {
+        this.getDriver().get("http://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");
+        return this;
+    }
+
     public CustomerCommonPage loginAsCustomer(String name) throws Exception {
         CustomerLoginPage loginPage = this.buttonCustomerLogin.click(CustomerLoginPage.class);
         loginPage.selectUser.selectByText(name);

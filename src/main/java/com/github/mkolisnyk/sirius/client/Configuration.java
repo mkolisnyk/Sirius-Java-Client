@@ -166,12 +166,12 @@ public final class Configuration {
      * as the default explicit timeout.
      * @return the timeout value.
      */
-    public static long timeout() {
+    public static int timeout() {
         String value = Configuration.get(ConfigurationOption.TIMEOUT);
         if (value == null || value.trim().equals("")) {
             return DateTimeConstants.SECONDS_PER_MINUTE;
         }
-        return Long.parseLong(value.trim());
+        return Integer.parseInt(value.trim());
     }
 
     /**

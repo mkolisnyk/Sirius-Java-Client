@@ -14,7 +14,6 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.github.mkolisnyk.sirius.client.Configuration;
 import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.PageFactory;
 import com.github.mkolisnyk.sirius.client.ui.ScrollTo;
@@ -28,7 +27,7 @@ import io.appium.java_client.MobileElement;
  *
  */
 public class Control {
-    protected static final long TIMEOUT = Configuration.timeout();
+    //protected static final long TIMEOUT = Configuration.timeout();
     private Page parent;
     private By locator;
     private String locatorText = "";
@@ -225,13 +224,32 @@ public class Control {
     }
 
     /**
+     * Checks some state of control depending on predicate specified.
+     * @param predicate {@link ExpectedState} expression returning boolean state value.
+     * @return true if condition is met, false - otherwise.
+     */
+    public boolean is(ExpectedState<Boolean, Control> predicate) {
+        return predicate.apply(this);
+    }
+
+    /**
+     * Verifies that field has some specific state and asserts the error if condition is not met.
+     * @param predicate {@link ExpectedState} expression returning boolean state value.
+     * @return current control.
+     */
+    public Control verify(ExpectedState<Boolean, Control> predicate) {
+        Assert.assertTrue("Unable to verify that " + predicate.description(this),
+                is(predicate));
+        return this;
+    }
+
+    /**
      * Checks if current control exists.
      * @param timeout time limit to wait
      * @return true - element present, false - otherwise.
      */
-    public boolean exists(long timeout) {
-        this.scrollTo();
-        return waitUntil(ExpectedConditions.presenceOfElementLocated(locator), timeout);
+    public boolean exists(int timeout) {
+        return is(ExpectedStates.exists(timeout));
     }
 
     /**
@@ -240,7 +258,7 @@ public class Control {
      * @return true - element present, false - otherwise.
      */
     public boolean exists() {
-        return exists(TIMEOUT);
+        return exists(Page.getTimeout());
     }
 
     /**
@@ -248,8 +266,8 @@ public class Control {
      * @param timeout time limit to wait
      * @return true - element is missing, false - otherwise.
      */
-    public boolean disappears(long timeout) {
-        return waitUntil(ExpectedConditions.not(ExpectedConditions.presenceOfElementLocated(locator)), timeout);
+    public boolean disappears(int timeout) {
+        return is(ExpectedStates.disappears(timeout));
     }
 
     /**
@@ -258,7 +276,7 @@ public class Control {
      * @return true - element is missing, false - otherwise.
      */
     public boolean disappears() {
-        return disappears(TIMEOUT);
+        return disappears(Page.getTimeout());
     }
 
     /**
@@ -277,7 +295,7 @@ public class Control {
      */
     public boolean visible() {
         Assert.assertTrue("Unable to find element: " + this.locator.toString(), exists());
-        return visible(TIMEOUT);
+        return visible(Page.getTimeout());
     }
 
     /**
@@ -296,7 +314,7 @@ public class Control {
      */
     public boolean invisible() {
         Assert.assertTrue("Unable to find element: " + this.locator.toString(), exists());
-        return invisible(TIMEOUT);
+        return invisible(Page.getTimeout());
     }
 
     /**
@@ -314,7 +332,7 @@ public class Control {
      * @return true - element is enabled, false - otherwise.
      */
     public boolean enabled() {
-        return enabled(TIMEOUT);
+        return enabled(Page.getTimeout());
     }
 
     /**
@@ -332,7 +350,7 @@ public class Control {
      * @return true - element is disabled, false - otherwise.
      */
     public boolean disabled() {
-        return enabled(TIMEOUT);
+        return enabled(Page.getTimeout());
     }
 
     /**
