@@ -4,6 +4,9 @@ import org.openqa.selenium.By;
 
 import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.SubItem;
+import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.disappears;
+import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.exists;
+
 
 /**
  * Major class corresponding to compound elements processing. In addition to
@@ -54,7 +57,7 @@ public class TableView extends Control {
      * @return true - element contains items, false - otherwise.
      */
     public boolean isNotEmpty(int timeout) {
-        return this.getItem(0).exists(timeout);
+        return this.getItem(0).is(exists(timeout));
     }
 
     /**
@@ -71,7 +74,7 @@ public class TableView extends Control {
      * @return true - element doesn't contain items, false - otherwise.
      */
     public boolean isEmpty(int timeout) {
-        return this.getItem(0).disappears(timeout);
+        return this.getItem(0).is(disappears(timeout));
     }
 
     /**

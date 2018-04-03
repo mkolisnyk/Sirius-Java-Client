@@ -35,6 +35,13 @@ public final class ExpectedStates {
         };
     }
     /**
+     * .
+     * @return .
+     */
+    public static ExpectedState<Boolean, Control> exists() {
+        return exists(Page.getTimeout());
+    }
+    /**
      * Checks if control doesn't exist
      * @param timeout waiting timeout.
      * @return true - element exists, false - otherwise.
@@ -55,6 +62,132 @@ public final class ExpectedStates {
                         parameter.getLocatorText());
             }
         };
+    }
+    /**
+     * .
+     * @return .
+     */
+    public static ExpectedState<Boolean, Control> disappears() {
+        return disappears(Page.getTimeout());
+    }
+    /**
+     * Checks if control is visible.
+     * @param timeout waiting timeout.
+     * @return true - element exists, false - otherwise.
+     */
+    public static ExpectedState<Boolean, Control> visible(final int timeout) {
+        return new ExpectedState<Boolean, Control>() {
+            @Override
+            public Boolean apply(Control element) {
+                element.scrollTo();
+                return element.waitUntil(
+                        ExpectedConditions.visibilityOfElementLocated(
+                                element.getLocator()),
+                        timeout);
+            }
+
+            @Override
+            public String description(Control parameter) {
+                return String.format("Element with locator '%s' is visible.",
+                        parameter.getLocatorText());
+            }
+        };
+    }
+    /**
+     * .
+     * @return .
+     */
+    public static ExpectedState<Boolean, Control> visible() {
+        return visible(Page.getTimeout());
+    }
+    /**
+     * Checks if control is invisible.
+     * @param timeout waiting timeout.
+     * @return true - element exists, false - otherwise.
+     */
+    public static ExpectedState<Boolean, Control> invisible(final int timeout) {
+        return new ExpectedState<Boolean, Control>() {
+            @Override
+            public Boolean apply(Control element) {
+                return element.waitUntil(
+                        ExpectedConditions.invisibilityOfElementLocated(
+                                element.getLocator()),
+                        timeout);
+            }
+
+            @Override
+            public String description(Control parameter) {
+                return String.format("Element with locator '%s' is invisible.",
+                        parameter.getLocatorText());
+            }
+        };
+    }
+    /**
+     * .
+     * @return .
+     */
+    public static ExpectedState<Boolean, Control> invisible() {
+        return invisible(Page.getTimeout());
+    }
+    /**
+     * Checks if control enabled.
+     * @param timeout waiting timeout.
+     * @return true - element exists, false - otherwise.
+     */
+    public static ExpectedState<Boolean, Control> enabled(final int timeout) {
+        return new ExpectedState<Boolean, Control>() {
+            @Override
+            public Boolean apply(Control element) {
+                element.scrollTo();
+                return element.waitUntil(
+                        ExpectedConditions.elementToBeClickable(
+                                element.getLocator()),
+                        timeout);
+            }
+
+            @Override
+            public String description(Control parameter) {
+                return String.format("Element with locator '%s' is enabled.",
+                        parameter.getLocatorText());
+            }
+        };
+    }
+    /**
+     * .
+     * @return .
+     */
+    public static ExpectedState<Boolean, Control> enabled() {
+        return enabled(Page.getTimeout());
+    }
+    /**
+     * Checks if control is disabled.
+     * @param timeout waiting timeout.
+     * @return true - element exists, false - otherwise.
+     */
+    public static ExpectedState<Boolean, Control> disabled(final int timeout) {
+        return new ExpectedState<Boolean, Control>() {
+            @Override
+            public Boolean apply(Control element) {
+                element.scrollTo();
+                return element.waitUntil(
+                        ExpectedConditions.not(
+                                ExpectedConditions.elementToBeClickable(element.getLocator())),
+                        timeout);
+            }
+
+            @Override
+            public String description(Control parameter) {
+                return String.format("Element with locator '%s' disabled.",
+                        parameter.getLocatorText());
+            }
+        };
+    }
+    /**
+     * .
+     * @return .
+     */
+    public static ExpectedState<Boolean, Control> disabled() {
+        return disabled(Page.getTimeout());
     }
     /**
      * Verifies if element has specific text.

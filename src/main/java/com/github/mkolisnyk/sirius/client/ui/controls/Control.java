@@ -11,7 +11,6 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.github.mkolisnyk.sirius.client.ui.Page;
@@ -244,120 +243,10 @@ public class Control {
     }
 
     /**
-     * Checks if current control exists.
-     * @param timeout time limit to wait
-     * @return true - element present, false - otherwise.
-     */
-    public boolean exists(int timeout) {
-        return is(ExpectedStates.exists(timeout));
-    }
-
-    /**
-     * Overloaded {@link Control#exists(long)} method which waits for element to
-     * appear during the default timeout.
-     * @return true - element present, false - otherwise.
-     */
-    public boolean exists() {
-        return exists(Page.getTimeout());
-    }
-
-    /**
-     * Checks if current control no longer exists.
-     * @param timeout time limit to wait
-     * @return true - element is missing, false - otherwise.
-     */
-    public boolean disappears(int timeout) {
-        return is(ExpectedStates.disappears(timeout));
-    }
-
-    /**
-     * Overloaded {@link Control#disappears(long)} method which waits for element to
-     * disappear during the default timeout.
-     * @return true - element is missing, false - otherwise.
-     */
-    public boolean disappears() {
-        return disappears(Page.getTimeout());
-    }
-
-    /**
-     * Checks if current control is visible.
-     * @param timeout time limit to wait
-     * @return true - element is visible, false - otherwise.
-     */
-    public boolean visible(long timeout) {
-        return waitUntil(ExpectedConditions.visibilityOfElementLocated(locator), timeout);
-    }
-
-    /**
-     * Overloaded {@link Control#visible(long)} method which waits for element to
-     * become visible during the default timeout.
-     * @return true - element is visible, false - otherwise.
-     */
-    public boolean visible() {
-        Assert.assertTrue("Unable to find element: " + this.locator.toString(), exists());
-        return visible(Page.getTimeout());
-    }
-
-    /**
-     * Checks if current control is invisible.
-     * @param timeout time limit to wait
-     * @return true - element is invisible, false - otherwise.
-     */
-    public boolean invisible(long timeout) {
-        return waitUntil(ExpectedConditions.invisibilityOfElementLocated(locator), timeout);
-    }
-
-    /**
-     * Overloaded {@link Control#invisible(long)} method which waits for element to
-     * become invisible during the default timeout.
-     * @return true - element is invisible, false - otherwise.
-     */
-    public boolean invisible() {
-        Assert.assertTrue("Unable to find element: " + this.locator.toString(), exists());
-        return invisible(Page.getTimeout());
-    }
-
-    /**
-     * Checks if current control is enabled.
-     * @param timeout time limit to wait
-     * @return true - element is enabled, false - otherwise.
-     */
-    public boolean enabled(long timeout) {
-        return waitUntil(ExpectedConditions.elementToBeClickable(locator), timeout);
-    }
-
-    /**
-     * Overloaded {@link Control#enabled(long)} method which waits for element to
-     * become enabled during the default timeout.
-     * @return true - element is enabled, false - otherwise.
-     */
-    public boolean enabled() {
-        return enabled(Page.getTimeout());
-    }
-
-    /**
-     * Checks if current control is disabled.
-     * @param timeout time limit to wait
-     * @return true - element is disabled, false - otherwise.
-     */
-    public boolean disabled(long timeout) {
-        return waitUntil(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(locator)), timeout);
-    }
-
-    /**
-     * Overloaded {@link Control#disabled(long)} method which waits for element to
-     * become disabled during the default timeout.
-     * @return true - element is disabled, false - otherwise.
-     */
-    public boolean disabled() {
-        return enabled(Page.getTimeout());
-    }
-
-    /**
      * Performs click on element.
      */
     public void click() {
-        Assert.assertTrue("Unable to find element: " + this.locator.toString(), exists());
+        verify(ExpectedStates.exists(Page.getTimeout()));
         this.element().click();
     }
 
@@ -384,7 +273,7 @@ public class Control {
      * @return element text.
      */
     public String getText() {
-        Assert.assertTrue("Unable to find element with locator: " + this.getLocator(), this.exists());
+        verify(ExpectedStates.exists(Page.getTimeout()));
         return this.element().getText();
     }
 
@@ -402,7 +291,7 @@ public class Control {
      * @return current control dimantions.
      */
     public Rectangle getRect() {
-        this.exists();
+        verify(ExpectedStates.exists(Page.getTimeout()));
         Rectangle rect = new Rectangle();
         Point location = ((MobileElement) this.element()).getCoordinates().onPage();
         Dimension size = this.element().getSize();

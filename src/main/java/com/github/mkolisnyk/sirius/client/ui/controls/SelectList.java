@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
 
 import com.github.mkolisnyk.sirius.client.ui.Page;
+import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.exists;
 
 /**
  * Control extension which wraps Select instance and corresponds to the list objects
@@ -34,7 +35,7 @@ public class SelectList extends Control {
      * @param value the value of item to select.
      */
     public void selectByText(String value) {
-        this.exists();
+        this.verify(exists());
         this.getSelect().selectByVisibleText(value);
     }
 }

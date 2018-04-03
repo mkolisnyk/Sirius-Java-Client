@@ -22,6 +22,7 @@ import org.reflections.Reflections;
 import com.github.mkolisnyk.sirius.client.Driver;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 import com.github.mkolisnyk.sirius.client.ui.controls.ExpectedState;
+import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.exists;
 
 import io.appium.java_client.AppiumDriver;
 
@@ -216,7 +217,7 @@ public class Page {
     public static Control getFirstAvailableControlFromList(Control[] controls, int tries) throws Exception {
         for (int i = 0; i < tries; i++) {
             for (Control control : controls) {
-                if (control.exists(1)) {
+                if (control.is(exists(1))) {
                     return control;
                 }
             }
@@ -271,7 +272,7 @@ public class Page {
      */
     public boolean isTextPresent(String text) {
         Control element = getTextControl(text);
-        return element.exists();
+        return element.is(exists());
     }
 
     /**
@@ -393,7 +394,7 @@ public class Page {
      */
     public boolean swipeScreen(boolean vertical, boolean leftTop, boolean once, int seconds) {
         Control scrollable = getScrollable();
-        if (!scrollable.exists(SHORT_TIMEOUT)) {
+        if (!scrollable.is(exists(SHORT_TIMEOUT))) {
             return false;
         }
         Rectangle area = scrollable.getRect();
@@ -462,17 +463,17 @@ public class Page {
      * @return if true, the control to scroll to is now visible on the screen. False - otherwise.
      */
     public boolean scrollTo(Control control, boolean up) {
-        if (control.exists(TINY_TIMEOUT)) {
+        if (control.is(exists(TINY_TIMEOUT))) {
             return true;
         }
         Control scrollable = getScrollable();
-        if (!scrollable.exists(TINY_TIMEOUT)) {
+        if (!scrollable.is(exists(TINY_TIMEOUT))) {
             return false;
         }
         String prevState = "";
         String currentState = this.getSource();
         while (!currentState.equals(prevState) && this.swipeScreen(true, up, true)) {
-            if (control.exists(TINY_TIMEOUT)) {
+            if (control.is(exists(TINY_TIMEOUT))) {
                 return true;
             }
             prevState = currentState;
@@ -626,7 +627,7 @@ public class Page {
         for (Field field : fields) {
             if (Control.class.isAssignableFrom(field.getType())) {
                 Control control = (Control) field.get(this);
-                if (!control.isExcludeFromSearch() && !control.exists(timeoutValue)) {
+                if (!control.isExcludeFromSearch() && !control.is(exists(timeoutValue))) {
                     return false;
                 }
             }
@@ -643,142 +644,36 @@ public class Page {
         return isCurrent(getTimeout());
     }
 
-    protected boolean allElementsAre(Control[] elements, String state) throws Exception {
+    /**
+     * Checks if all elements passed as the parameter have the state
+     * specified by predicate.
+     * @param elements the list of elements to check.
+     * @param predicate the condition to check against.
+     * @return true if all elements met condition. False - otherwise.
+     */
+    public boolean allOf(Control[] elements, ExpectedState<Boolean, Control> predicate) {
         for (Control element : elements) {
-            if (!(Boolean) (element.getClass().getMethod(state).invoke(element))) {
+            if (!element.is(predicate)) {
                 return false;
             }
         }
         return true;
     }
 
-    protected boolean anyOfElementsIs(Control[] elements, String state) throws Exception {
+    /**
+     * Checks if any of elements passed as the parameter has the state
+     * specified by predicate.
+     * @param elements the list of elements to check.
+     * @param predicate the condition to check against.
+     * @return true if any of elements met condition. False - otherwise.
+     */
+    public boolean anyOf(Control[] elements, ExpectedState<Boolean, Control> predicate) {
         for (Control element : elements) {
-            if ((Boolean) element.getClass().getMethod(state, long.class).invoke(element, 1)) {
+            if (element.is(predicate)) {
                 return true;
             }
         }
         return false;
-    }
-
-    /**
-     * Checks whether all elements passed as parameter exist.
-     * @param elements the list of elements to check.
-     * @return true if condition is met. False - otherwise.
-     * @throws Exception reflection related errors.
-     */
-    public boolean allElementsExist(Control[] elements) throws Exception {
-        return allElementsAre(elements, "exists");
-    }
-
-    /**
-     * Checks whether all elements passed as parameter do not exist.
-     * @param elements the list of elements to check.
-     * @return true if condition is met. False - otherwise.
-     * @throws Exception reflection related errors.
-     */
-    public boolean allElementsDoNotExist(Control[] elements) throws Exception {
-        return allElementsAre(elements, "disappears");
-    }
-
-    /**
-     * Checks whether all elements passed as parameter are visible.
-     * @param elements the list of elements to check.
-     * @return true if condition is met. False - otherwise.
-     * @throws Exception reflection related errors.
-     */
-    public boolean allElementsAreVisible(Control[] elements) throws Exception {
-        return allElementsAre(elements, "visible");
-    }
-
-    /**
-     * Checks whether all elements passed as parameter are in invisible state.
-     * @param elements the list of elements to check.
-     * @return true if condition is met. False - otherwise.
-     * @throws Exception reflection related errors.
-     */
-    public boolean allElementsAreInvisible(Control[] elements) throws Exception {
-        return allElementsAre(elements, "invisible");
-    }
-
-    /**
-     * Checks whether all elements passed as parameter are at enabled state.
-     * @param elements the list of elements to check.
-     * @return true if condition is met. False - otherwise.
-     * @throws Exception reflection related errors.
-     */
-    public boolean allElementsAreEnabled(Control[] elements) throws Exception {
-        return allElementsAre(elements, "enabled");
-    }
-
-    /**
-     * Checks whether all elements passed as parameter are at disabled state.
-     * @param elements the list of elements to check.
-     * @return true if condition is met. False - otherwise.
-     * @throws Exception reflection related errors.
-     */
-    public boolean allElementsAreDisabled(Control[] elements) throws Exception {
-        return allElementsAre(elements, "disabled");
-    }
-
-    /**
-     * Checks if at least one of the elements passed as the parameter exists.
-     * @param elements the list of elements to check.
-     * @return true if condition is met. False - otherwise.
-     * @throws Exception reflection related errors.
-     */
-    public boolean anyOfElementsExist(Control[] elements) throws Exception {
-        return anyOfElementsIs(elements, "exists");
-    }
-
-    /**
-     * Checks if at least one of the elements passed as the parameter doesn't exist.
-     * @param elements the list of elements to check.
-     * @return true if condition is met. False - otherwise.
-     * @throws Exception reflection related errors.
-     */
-    public boolean anyOfElementsDoNotExist(Control[] elements) throws Exception {
-        return anyOfElementsIs(elements, "disappears");
-    }
-
-    /**
-     * Checks if at least one of the elements passed as the parameter is visible.
-     * @param elements the list of elements to check.
-     * @return true if condition is met. False - otherwise.
-     * @throws Exception reflection related errors.
-     */
-    public boolean anyOfElementsIsVisible(Control[] elements) throws Exception {
-        return anyOfElementsIs(elements, "visible");
-    }
-
-    /**
-     * Checks if at least one of the elements passed as the parameter is invisible.
-     * @param elements the list of elements to check.
-     * @return true if condition is met. False - otherwise.
-     * @throws Exception reflection related errors.
-     */
-    public boolean anyOfElementsIsInvisible(Control[] elements) throws Exception {
-        return anyOfElementsIs(elements, "invisible");
-    }
-
-    /**
-     * Checks if at least one of the elements passed as the parameter is enabled.
-     * @param elements the list of elements to check.
-     * @return true if condition is met. False - otherwise.
-     * @throws Exception reflection related errors.
-     */
-    public boolean anyOfElementsIsEnabled(Control[] elements) throws Exception {
-        return anyOfElementsIs(elements, "enabled");
-    }
-
-    /**
-     * Checks if at least one of the elements passed as the parameter is disabled.
-     * @param elements the list of elements to check.
-     * @return true if condition is met. False - otherwise.
-     * @throws Exception reflection related errors.
-     */
-    public boolean anyOfElementsIsDisabled(Control[] elements) throws Exception {
-        return anyOfElementsIs(elements, "disabled");
     }
 
     /**

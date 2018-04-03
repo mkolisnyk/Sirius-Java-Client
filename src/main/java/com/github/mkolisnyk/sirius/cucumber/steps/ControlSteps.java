@@ -11,6 +11,8 @@ import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 import com.github.mkolisnyk.sirius.client.ui.controls.Edit;
 import com.udojava.evalex.Expression;
+import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.visible;
+import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.invisible;
 
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
@@ -105,10 +107,10 @@ public class ControlSteps {
                     control);
             if (shown.equals("Y")) {
                 Assert.assertTrue(String.format("Element \"%s\" isn't visible", element),
-                        control.visible());
+                        control.is(visible()));
             } else {
                 Assert.assertTrue(String.format("Element \"%s\" is unexpectly visible", element),
-                        control.invisible());
+                        control.is(invisible()));
             }
         }
     }
