@@ -1,7 +1,10 @@
 package com.github.mkolisnyk.sirius.client.ui.controls;
 
+import java.lang.reflect.Field;
+
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import com.github.mkolisnyk.sirius.client.ui.FindBy;
 import com.github.mkolisnyk.sirius.client.ui.Page;
 
 /**
@@ -228,19 +231,43 @@ public final class ExpectedStates {
         };
       }
     /**
-     * Predicate used to check if specific page is current.
-     * @return true if page is current, false - otherwise.
+     * <p>
+     * Checks if the actual page observed from application under test corresponds
+     * to current page class instance. Mainly, the method waits for all controls
+     * declared in current page class to appear on the current page.
+     * </p>
+     * <p>
+     * In some cases there can be elements which are declared on the page class but may not
+     * be available on screen immediately. It can be related to dynamic elements which
+     * appear after some event on the page or simply by the fact that actual object isn't visible
+     * on screen as it happens for Android. In order to handle such situation the <b>isCurrent</b>
+     * method also checks if {@link FindBy#excludeFromSearch()} flag for each specific element
+     * is set to <b>true</b>. If so, the corresponding control is not participating in check.
+     * </p>
+     * @param timeout the timeout to wait for each element to appear.
+     * @return true if all searched control on current page object are actually present.
+     * @see {@link FindBy#excludeFromSearch()}
      */
-    public static ExpectedState<Boolean, Page> current() {
+    public static ExpectedState<Boolean, Page> current(final int timeout) {
         return new ExpectedState<Boolean, Page>() {
             @Override
             public Boolean apply(Page page) {
-                try {
-                    return page.isCurrent();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                Field[] fields = this.getClass().getFields();
+                for (Field field : fields) {
+                    if (Control.class.isAssignableFrom(field.getType())) {
+                        Control control = null;
+                        try {
+                            control = (Control) field.get(this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (control == null
+                            || (!control.isExcludeFromSearch() && !control.is(exists(timeout)))) {
+                            return false;
+                        }
+                    }
                 }
-                return false;
+                return true;
             }
 
             @Override
@@ -248,5 +275,12 @@ public final class ExpectedStates {
                 return String.format("the page is current.");
             }
         };
-      }
+    }
+    /**
+     * Overloaded version of {@link ExpectedStates#current(int)} which waits for page during default timeout.
+     * @return true if all searched control on current page object are actually present.
+     */
+    public static ExpectedState<Boolean, Page> current() {
+        return current(Page.getTimeout());
+    }
 }

@@ -23,6 +23,7 @@ import com.github.mkolisnyk.sirius.client.Driver;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 import com.github.mkolisnyk.sirius.client.ui.controls.ExpectedState;
 import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.exists;
+import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.current;
 
 import io.appium.java_client.AppiumDriver;
 
@@ -199,7 +200,7 @@ public class Page {
         }
         for (int i = 0; i < tries; i++) {
             for (Page page : pages) {
-                if (page.isCurrent(1)) {
+                if (page.is(current(1))) {
                     return page;
                 }
             }
@@ -604,47 +605,6 @@ public class Page {
     }
 
     /**
-     * <p>
-     * Checks if the actual page observed from application under test corresponds
-     * to current page class instance. Mainly, the method waits for all controls
-     * declared in current page class to appear on the current page.
-     * </p>
-     * <p>
-     * In some cases there can be elements which are declared on the page class but may not
-     * be available on screen immediately. It can be related to dynamic elements which
-     * appear after some event on the page or simply by the fact that actual object isn't visible
-     * on screen as it happens for Android. In order to handle such situation the <b>isCurrent</b>
-     * method also checks if {@link FindBy#excludeFromSearch()} flag for each specific element
-     * is set to <b>true</b>. If so, the corresponding control is not participating in check.
-     * </p>
-     * @param timeoutValue the timeout to wait for each element to appear.
-     * @return true if all searched control on current page object are actually present.
-     * @throws Exception mainly related to reflection problems when some control attributes are missing.
-     * @see {@link FindBy#excludeFromSearch()}
-     */
-    public boolean isCurrent(int timeoutValue) throws Exception {
-        Field[] fields = this.getClass().getFields();
-        for (Field field : fields) {
-            if (Control.class.isAssignableFrom(field.getType())) {
-                Control control = (Control) field.get(this);
-                if (!control.isExcludeFromSearch() && !control.is(exists(timeoutValue))) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Overloaded version of {@link Page#isCurrent(long)} which waits for page during default timeout.
-     * @return true if all searched control on current page object are actually present.
-     * @throws Exception mainly related to reflection problems when some control attributes are missing.
-     */
-    public boolean isCurrent() throws Exception {
-        return isCurrent(getTimeout());
-    }
-
-    /**
      * Checks if all elements passed as the parameter have the state
      * specified by predicate.
      * @param elements the list of elements to check.
@@ -696,7 +656,7 @@ public class Page {
      * @throws Exception either reflection problems (like access) or missing attributes.
      * @see Alias
      */
-    public Control onPage(String name) throws Exception {
+    public Control field(String name) throws Exception {
         for (Field field : this.getClass().getFields()) {
             if (Control.class.isAssignableFrom(field.getType())) {
                 Alias alias = field.getAnnotation(Alias.class);
@@ -729,7 +689,7 @@ public class Page {
      * @throws Exception either reflection problems (like access) or missing attributes.
      * @see Alias
      */
-    public <T extends Control> T onPage(String name, Class<T> controlType) throws Exception {
+    public <T extends Control> T field(String name, Class<T> controlType) throws Exception {
         for (Field field : this.getClass().getFields()) {
             if (controlType.isAssignableFrom(field.getType())) {
                 Alias alias = field.getAnnotation(Alias.class);

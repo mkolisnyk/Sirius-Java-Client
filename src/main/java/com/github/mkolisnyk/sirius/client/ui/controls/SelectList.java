@@ -1,10 +1,11 @@
 package com.github.mkolisnyk.sirius.client.ui.controls;
 
+import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.exists;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
 
 import com.github.mkolisnyk.sirius.client.ui.Page;
-import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.exists;
 
 /**
  * Control extension which wraps Select instance and corresponds to the list objects

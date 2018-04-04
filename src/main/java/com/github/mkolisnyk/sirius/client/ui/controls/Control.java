@@ -1,5 +1,7 @@
 package com.github.mkolisnyk.sirius.client.ui.controls;
 
+import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.current;
+
 import java.awt.Rectangle;
 import java.util.HashMap;
 
@@ -264,7 +266,7 @@ public class Control {
         T page = PageFactory.init(this.getDriver(), pageClass);
         Assert.assertTrue(
                 String.format("The page of %s class didn't appear during specified timeout", pageClass.getName()),
-                page.isCurrent());
+                page.is(current()));
         return page;
     }
 

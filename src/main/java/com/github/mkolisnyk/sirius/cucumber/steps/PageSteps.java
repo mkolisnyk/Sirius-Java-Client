@@ -12,6 +12,8 @@ import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.current;
+
 
 /**
  * Groups functionality targeted to pages.
@@ -43,7 +45,8 @@ public class PageSteps {
     @Then("^I should see the \"(.*)\" (?:page|screen)$")
     public void verifyCurrentPage(String name) throws Exception {
         Page target = Page.forName(name);
-        Assert.assertTrue("The '" + name + "' screen is not current", target.isCurrent());
+        Assert.assertTrue("The '" + name + "' screen is not current",
+                target.is(current()));
         Page.setCurrent(target);
     }
     /**

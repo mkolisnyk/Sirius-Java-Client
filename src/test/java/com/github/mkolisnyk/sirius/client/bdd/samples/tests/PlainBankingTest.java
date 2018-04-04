@@ -53,10 +53,10 @@ public class PlainBankingTest {
     public void testSampleBankingUsingNames() throws Exception {
         HomePage home = (HomePage) Page.forName("Banking Home").navigate();
         CustomerDepositPage depositPage = home.loginAsCustomer("Harry Potter")
-                .onPage("Deposit").click(CustomerDepositPage.class)
+                .field("Deposit").click(CustomerDepositPage.class)
                 .navigate()
-                .onPage("Deposit Amount", Edit.class).setText("100")
-                .getParent().onPage("Submit Deposit").click(CustomerDepositPage.class);
+                .field("Deposit Amount", Edit.class).setText("100")
+                .getParent().field("Submit Deposit").click(CustomerDepositPage.class);
         Assert.assertTrue(depositPage.isTextPresent("Deposit Successful"));
         Assert.assertEquals("100", depositPage.labelBalance.getText());
     }
@@ -78,5 +78,27 @@ public class PlainBankingTest {
             .verify(current())
             .verify(textPresent("Deposit Successful"));
         depositPage.labelBalance.verify(hasText("100"));
+    }
+    @Test
+    public void testSampleBankingUsingNamesAndPredicates() throws Exception {
+        ((HomePage) Page.forName("Banking Home")
+            .navigate().verify(current()))
+            .loginAsCustomer("Harry Potter")
+            .field("Deposit")
+                .verify(exists(1))
+                .verify(visible())
+                .verify(enabled())
+                .click(CustomerDepositPage.class)
+            .navigate()
+                .verify(current())
+            .field("Deposit Amount", Edit.class)
+                .setText("100")
+                .verify(hasText("100"))
+            .getParent().field("Submit Deposit")
+                .verify(exists(1))
+                .click(CustomerDepositPage.class)
+            .verify(textPresent("Deposit Successful"))
+            .field("Balance")
+                .verify(hasText("100"));
     }
 }

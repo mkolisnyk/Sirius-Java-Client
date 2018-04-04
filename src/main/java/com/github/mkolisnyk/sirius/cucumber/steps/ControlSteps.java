@@ -31,7 +31,7 @@ public class ControlSteps {
      */
     @When("^(?:I |)(?:click|tap) on the \"(.*)\" (?:button|element|control)$")
     public void clickOnTheButton(String name) throws Exception {
-        Control control = Page.getCurrent().onPage(name);
+        Control control = Page.getCurrent().field(name);
         Assert.assertNotNull("Unable to find the '" + name + "' element on current page.", control);
         control.click();
     }
@@ -43,7 +43,7 @@ public class ControlSteps {
      */
     @Then("^(?:I should see |)the \"(.*)\" field is available$")
     public Control verifyElementExists(String fieldName) throws Exception {
-        Control control = Page.getCurrent().onPage(fieldName);
+        Control control = Page.getCurrent().field(fieldName);
         Assert.assertNotNull("Unable to find the '" + fieldName + "' element on current page.", control);
         return control;
     }
@@ -102,7 +102,7 @@ public class ControlSteps {
 
             String element = row.get("Element");
             String shown = row.get("Shown");
-            Control control = Page.getCurrent().onPage(element);
+            Control control = Page.getCurrent().field(element);
             Assert.assertNotNull("Element with the '" + element + "' alias wasn't declared on current page",
                     control);
             if (shown.equals("Y")) {
@@ -124,7 +124,7 @@ public class ControlSteps {
             throws Exception {
         Control[] controls = new Control[elements.size()];
         for (int i = 0; i < controls.length; i++) {
-            controls[i] = Page.getCurrent().onPage(elements.get(i));
+            controls[i] = Page.getCurrent().field(elements.get(i));
         }
         Control control = Page.getFirstAvailableControlFromList(controls, (int) Page.getTimeout());
         Assert.assertNotNull("None of the expected elements list was found",
@@ -153,7 +153,7 @@ public class ControlSteps {
         for (Map<String, String> row : content) {
             String field = row.get("Field");
             String as = row.get("As");
-            String value = Page.getCurrent().onPage(field).getText();
+            String value = Page.getCurrent().field(field).getText();
             Context.put(as, value);
         }
     }
@@ -171,7 +171,7 @@ public class ControlSteps {
             String field, String formula) throws Throwable {
         final double precision = 0.0099;
         final int precisionNumbers = 6;
-        double pageVal = Double.parseDouble(Page.getCurrent().onPage(field)
+        double pageVal = Double.parseDouble(Page.getCurrent().field(field)
                 .getText());
         for (String key : Context.variables()) {
             formula = formula.replaceAll(key, Context.get(key).toString());

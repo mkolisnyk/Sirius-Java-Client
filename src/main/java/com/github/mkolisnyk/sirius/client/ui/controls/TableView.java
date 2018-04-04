@@ -1,11 +1,12 @@
 package com.github.mkolisnyk.sirius.client.ui.controls;
 
+import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.disappears;
+import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.exists;
+
 import org.openqa.selenium.By;
 
 import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.SubItem;
-import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.disappears;
-import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.exists;
 
 
 /**
