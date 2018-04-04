@@ -1,6 +1,6 @@
 package com.github.mkolisnyk.sirius.client.ui.controls;
 
-import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.exists;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.States.exists;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
@@ -38,5 +38,15 @@ public class SelectList extends Control {
     public void selectByText(String value) {
         this.verify(exists());
         this.getSelect().selectByVisibleText(value);
+    }
+
+    /* (non-Javadoc)
+     * @see com.github.mkolisnyk.sirius.client.ui.controls.Control#setValue(java.lang.String)
+     */
+    @Override
+    public Control setValue(String value) {
+        this.verify(exists());
+        this.getSelect().selectByVisibleText(value);
+        return this;
     }
 }

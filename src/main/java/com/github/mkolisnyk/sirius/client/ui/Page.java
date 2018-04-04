@@ -1,5 +1,8 @@
 package com.github.mkolisnyk.sirius.client.ui;
 
+import static com.github.mkolisnyk.sirius.client.ui.predicates.States.current;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.States.exists;
+
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
@@ -21,9 +24,7 @@ import org.reflections.Reflections;
 
 import com.github.mkolisnyk.sirius.client.Driver;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
-import com.github.mkolisnyk.sirius.client.ui.controls.ExpectedState;
-import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.exists;
-import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.current;
+import com.github.mkolisnyk.sirius.client.ui.predicates.Operation;
 
 import io.appium.java_client.AppiumDriver;
 
@@ -611,7 +612,7 @@ public class Page {
      * @param predicate the condition to check against.
      * @return true if all elements met condition. False - otherwise.
      */
-    public boolean allOf(Control[] elements, ExpectedState<Boolean, Control> predicate) {
+    public boolean allOf(Control[] elements, Operation<Boolean, Control> predicate) {
         for (Control element : elements) {
             if (!element.is(predicate)) {
                 return false;
@@ -627,7 +628,7 @@ public class Page {
      * @param predicate the condition to check against.
      * @return true if any of elements met condition. False - otherwise.
      */
-    public boolean anyOf(Control[] elements, ExpectedState<Boolean, Control> predicate) {
+    public boolean anyOf(Control[] elements, Operation<Boolean, Control> predicate) {
         for (Control element : elements) {
             if (element.is(predicate)) {
                 return true;
@@ -703,19 +704,19 @@ public class Page {
 
     /**
      * Checks some state of page depending on predicate specified.
-     * @param predicate {@link ExpectedState} expression returning boolean state value.
+     * @param predicate {@link Operation} expression returning boolean state value.
      * @return true if condition is met, false - otherwise.
      */
-    public boolean is(ExpectedState<Boolean, Page> predicate) {
+    public boolean is(Operation<Boolean, Page> predicate) {
         return predicate.apply(this);
     }
 
     /**
      * Verifies that page has some specific state and asserts the error if condition is not met.
-     * @param predicate {@link ExpectedState} expression returning boolean state value.
+     * @param predicate {@link Operation} expression returning boolean state value.
      * @return current control.
      */
-    public Page verify(ExpectedState<Boolean, Page> predicate) {
+    public Page verify(Operation<Boolean, Page> predicate) {
         Assert.assertTrue("Unable to verify that " + predicate.description(this),
                 is(predicate));
         return this;

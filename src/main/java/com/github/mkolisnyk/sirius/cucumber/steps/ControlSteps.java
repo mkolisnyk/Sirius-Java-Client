@@ -1,5 +1,8 @@
 package com.github.mkolisnyk.sirius.cucumber.steps;
 
+import static com.github.mkolisnyk.sirius.client.ui.predicates.States.invisible;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.States.visible;
+
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +14,6 @@ import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 import com.github.mkolisnyk.sirius.client.ui.controls.Edit;
 import com.udojava.evalex.Expression;
-import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.visible;
-import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.invisible;
 
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;

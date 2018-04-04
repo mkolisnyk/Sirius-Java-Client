@@ -1,6 +1,6 @@
 package com.github.mkolisnyk.sirius.client.ui.controls;
 
-import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.current;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.States.current;
 
 import java.awt.Rectangle;
 import java.util.HashMap;
@@ -19,6 +19,8 @@ import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.PageFactory;
 import com.github.mkolisnyk.sirius.client.ui.ScrollTo;
 import com.github.mkolisnyk.sirius.client.ui.SubItem;
+import com.github.mkolisnyk.sirius.client.ui.predicates.States;
+import com.github.mkolisnyk.sirius.client.ui.predicates.Operation;
 
 import io.appium.java_client.MobileElement;
 
@@ -184,7 +186,7 @@ public class Control {
      * Gets the map of sub-items associated with their name.
      * @return map of sub-items associated with their name.
      */
-    public HashMap<String, SubItem> getSubItemsMap() {
+    protected HashMap<String, SubItem> getSubItemsMap() {
         return subItemsMap;
     }
 
@@ -223,22 +225,47 @@ public class Control {
         }
         return true;
     }
-
+    /**
+     * .
+     * @param <T> .
+     * @param predicate .
+     * @return .
+     */
+    public <T> T perform(Operation<T, Control> predicate) {
+        return predicate.apply(this);
+    }
+    /**
+     * .
+     * @param <T> .
+     * @param predicate .
+     * @return .
+     */
+    public <T> T get(Operation<T, Control> predicate) {
+        return predicate.apply(this);
+    }
+    /**
+     * .
+     * @param predicate .
+     * @return .
+     */
+    public Control set(Operation<Control, Control> predicate) {
+        return predicate.apply(this);
+    }
     /**
      * Checks some state of control depending on predicate specified.
-     * @param predicate {@link ExpectedState} expression returning boolean state value.
+     * @param predicate {@link Operation} expression returning boolean state value.
      * @return true if condition is met, false - otherwise.
      */
-    public boolean is(ExpectedState<Boolean, Control> predicate) {
+    public boolean is(Operation<Boolean, Control> predicate) {
         return predicate.apply(this);
     }
 
     /**
      * Verifies that field has some specific state and asserts the error if condition is not met.
-     * @param predicate {@link ExpectedState} expression returning boolean state value.
+     * @param predicate {@link Operation} expression returning boolean state value.
      * @return current control.
      */
-    public Control verify(ExpectedState<Boolean, Control> predicate) {
+    public Control verify(Operation<Boolean, Control> predicate) {
         Assert.assertTrue("Unable to verify that " + predicate.description(this),
                 is(predicate));
         return this;
@@ -248,7 +275,7 @@ public class Control {
      * Performs click on element.
      */
     public void click() {
-        verify(ExpectedStates.exists(Page.getTimeout()));
+        verify(States.exists(Page.getTimeout()));
         this.element().click();
     }
 
@@ -275,7 +302,7 @@ public class Control {
      * @return element text.
      */
     public String getText() {
-        verify(ExpectedStates.exists(Page.getTimeout()));
+        verify(States.exists(Page.getTimeout()));
         return this.element().getText();
     }
 
@@ -287,13 +314,23 @@ public class Control {
     public String getValue() {
         return this.getText();
     }
-
+    /**
+     * Common method for setting values. For extended classes
+     * it is supposed to set the value for the writable elements
+     * like edit boxes, check boxes, radio buttons. For others it shouldn't
+     * do anything.
+     * @param value the value to set.
+     * @return current control. It is needed for operation chains.
+     */
+    public Control setValue(String value) {
+        return this;
+    }
     /**
      * Gets rectangular dimensions of current control.
      * @return current control dimantions.
      */
     public Rectangle getRect() {
-        verify(ExpectedStates.exists(Page.getTimeout()));
+        verify(States.exists(Page.getTimeout()));
         Rectangle rect = new Rectangle();
         Point location = ((MobileElement) this.element()).getCoordinates().onPage();
         Dimension size = this.element().getSize();

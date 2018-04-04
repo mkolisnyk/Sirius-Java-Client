@@ -1,5 +1,7 @@
 package com.github.mkolisnyk.sirius.cucumber.steps;
 
+import static com.github.mkolisnyk.sirius.client.ui.predicates.States.current;
+
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +14,6 @@ import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.current;
 
 
 /**

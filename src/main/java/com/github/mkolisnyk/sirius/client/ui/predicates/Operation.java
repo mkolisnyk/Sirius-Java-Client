@@ -1,4 +1,4 @@
-package com.github.mkolisnyk.sirius.client.ui.controls;
+package com.github.mkolisnyk.sirius.client.ui.predicates;
 
 /**
  * Common interface for control state predicate.
@@ -6,7 +6,7 @@ package com.github.mkolisnyk.sirius.client.ui.controls;
  * @param <T> the returning type.
  * @param <R> the parameter type.
  */
-public interface ExpectedState<T, R> {
+public interface Operation<T, R> {
     /**
      * Performs predicate action.
      * @param parameter the parameter to pass.
@@ -17,7 +17,7 @@ public interface ExpectedState<T, R> {
     /**
      * Returns the string description explaining the expected state.
      * @param parameter typically that should be the reference to object
-     *      where the {@link ExpectedState#apply(Object)} method is using
+     *      where the {@link Operation#apply(Object)} method is using
      *      to get additional information.
      * @return description value.
      */

@@ -43,4 +43,12 @@ public class Edit extends Control {
     public String getText() {
         return super.element().getAttribute("value");
     }
+
+    /* (non-Javadoc)
+     * @see com.github.mkolisnyk.sirius.client.ui.controls.Control#setValue(java.lang.String)
+     */
+    @Override
+    public Control setValue(String value) {
+        return this.setText(value);
+    }
 }

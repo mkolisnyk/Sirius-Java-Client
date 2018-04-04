@@ -1,4 +1,4 @@
-package com.github.mkolisnyk.sirius.client.ui.controls;
+package com.github.mkolisnyk.sirius.client.ui.predicates;
 
 import java.lang.reflect.Field;
 
@@ -6,21 +6,23 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.github.mkolisnyk.sirius.client.ui.FindBy;
 import com.github.mkolisnyk.sirius.client.ui.Page;
+import com.github.mkolisnyk.sirius.client.ui.controls.Control;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.text;
 
 /**
  * The container of Control state predicates.
  * @author Mykola Kolisnyk
  */
-public final class ExpectedStates {
-    private ExpectedStates() {
+public final class States {
+    private States() {
     }
     /**
      * Checks if control exists.
      * @param timeout waiting timeout.
      * @return true - element exists, false - otherwise.
      */
-    public static ExpectedState<Boolean, Control> exists(final int timeout) {
-        return new ExpectedState<Boolean, Control>() {
+    public static Operation<Boolean, Control> exists(final int timeout) {
+        return new Operation<Boolean, Control>() {
             @Override
             public Boolean apply(Control element) {
                 element.scrollTo();
@@ -41,7 +43,7 @@ public final class ExpectedStates {
      * .
      * @return .
      */
-    public static ExpectedState<Boolean, Control> exists() {
+    public static Operation<Boolean, Control> exists() {
         return exists(Page.getTimeout());
     }
     /**
@@ -49,8 +51,8 @@ public final class ExpectedStates {
      * @param timeout waiting timeout.
      * @return true - element exists, false - otherwise.
      */
-    public static ExpectedState<Boolean, Control> disappears(final int timeout) {
-        return new ExpectedState<Boolean, Control>() {
+    public static Operation<Boolean, Control> disappears(final int timeout) {
+        return new Operation<Boolean, Control>() {
             @Override
             public Boolean apply(Control element) {
                 return element.waitUntil(
@@ -70,7 +72,7 @@ public final class ExpectedStates {
      * .
      * @return .
      */
-    public static ExpectedState<Boolean, Control> disappears() {
+    public static Operation<Boolean, Control> disappears() {
         return disappears(Page.getTimeout());
     }
     /**
@@ -78,8 +80,8 @@ public final class ExpectedStates {
      * @param timeout waiting timeout.
      * @return true - element exists, false - otherwise.
      */
-    public static ExpectedState<Boolean, Control> visible(final int timeout) {
-        return new ExpectedState<Boolean, Control>() {
+    public static Operation<Boolean, Control> visible(final int timeout) {
+        return new Operation<Boolean, Control>() {
             @Override
             public Boolean apply(Control element) {
                 element.scrollTo();
@@ -100,7 +102,7 @@ public final class ExpectedStates {
      * .
      * @return .
      */
-    public static ExpectedState<Boolean, Control> visible() {
+    public static Operation<Boolean, Control> visible() {
         return visible(Page.getTimeout());
     }
     /**
@@ -108,8 +110,8 @@ public final class ExpectedStates {
      * @param timeout waiting timeout.
      * @return true - element exists, false - otherwise.
      */
-    public static ExpectedState<Boolean, Control> invisible(final int timeout) {
-        return new ExpectedState<Boolean, Control>() {
+    public static Operation<Boolean, Control> invisible(final int timeout) {
+        return new Operation<Boolean, Control>() {
             @Override
             public Boolean apply(Control element) {
                 return element.waitUntil(
@@ -129,7 +131,7 @@ public final class ExpectedStates {
      * .
      * @return .
      */
-    public static ExpectedState<Boolean, Control> invisible() {
+    public static Operation<Boolean, Control> invisible() {
         return invisible(Page.getTimeout());
     }
     /**
@@ -137,8 +139,8 @@ public final class ExpectedStates {
      * @param timeout waiting timeout.
      * @return true - element exists, false - otherwise.
      */
-    public static ExpectedState<Boolean, Control> enabled(final int timeout) {
-        return new ExpectedState<Boolean, Control>() {
+    public static Operation<Boolean, Control> enabled(final int timeout) {
+        return new Operation<Boolean, Control>() {
             @Override
             public Boolean apply(Control element) {
                 element.scrollTo();
@@ -159,7 +161,7 @@ public final class ExpectedStates {
      * .
      * @return .
      */
-    public static ExpectedState<Boolean, Control> enabled() {
+    public static Operation<Boolean, Control> enabled() {
         return enabled(Page.getTimeout());
     }
     /**
@@ -167,8 +169,8 @@ public final class ExpectedStates {
      * @param timeout waiting timeout.
      * @return true - element exists, false - otherwise.
      */
-    public static ExpectedState<Boolean, Control> disabled(final int timeout) {
-        return new ExpectedState<Boolean, Control>() {
+    public static Operation<Boolean, Control> disabled(final int timeout) {
+        return new Operation<Boolean, Control>() {
             @Override
             public Boolean apply(Control element) {
                 element.scrollTo();
@@ -189,7 +191,7 @@ public final class ExpectedStates {
      * .
      * @return .
      */
-    public static ExpectedState<Boolean, Control> disabled() {
+    public static Operation<Boolean, Control> disabled() {
         return disabled(Page.getTimeout());
     }
     /**
@@ -197,11 +199,11 @@ public final class ExpectedStates {
      * @param text the text to check.
      * @return true if element has specified text. False - otherwise.
      */
-    public static ExpectedState<Boolean, Control> hasText(final String text) {
-        return new ExpectedState<Boolean, Control>() {
+    public static Operation<Boolean, Control> hasText(final String text) {
+        return new Operation<Boolean, Control>() {
             @Override
             public Boolean apply(Control element) {
-                return element.getText().equals(text);
+                return element.get(text()).equals(text);
             }
 
             @Override
@@ -216,8 +218,8 @@ public final class ExpectedStates {
      * @param text the text to check.
      * @return predicate which verifies text presence.
      */
-    public static ExpectedState<Boolean, Page> textPresent(final String text) {
-        return new ExpectedState<Boolean, Page>() {
+    public static Operation<Boolean, Page> textPresent(final String text) {
+        return new Operation<Boolean, Page>() {
             @Override
             public Boolean apply(Page page) {
                 return page.isTextPresent(text);
@@ -248,8 +250,8 @@ public final class ExpectedStates {
      * @return true if all searched control on current page object are actually present.
      * @see {@link FindBy#excludeFromSearch()}
      */
-    public static ExpectedState<Boolean, Page> current(final int timeout) {
-        return new ExpectedState<Boolean, Page>() {
+    public static Operation<Boolean, Page> current(final int timeout) {
+        return new Operation<Boolean, Page>() {
             @Override
             public Boolean apply(Page page) {
                 Field[] fields = this.getClass().getFields();
@@ -277,10 +279,10 @@ public final class ExpectedStates {
         };
     }
     /**
-     * Overloaded version of {@link ExpectedStates#current(int)} which waits for page during default timeout.
+     * Overloaded version of {@link States#current(int)} which waits for page during default timeout.
      * @return true if all searched control on current page object are actually present.
      */
-    public static ExpectedState<Boolean, Page> current() {
+    public static Operation<Boolean, Page> current() {
         return current(Page.getTimeout());
     }
 }

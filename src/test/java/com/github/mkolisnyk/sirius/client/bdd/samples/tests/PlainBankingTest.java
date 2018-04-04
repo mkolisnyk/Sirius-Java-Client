@@ -1,5 +1,10 @@
 package com.github.mkolisnyk.sirius.client.bdd.samples.tests;
 
+import static com.github.mkolisnyk.sirius.client.ui.predicates.States.*;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.*;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.*;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Setters.*;
+
 import java.io.File;
 
 import org.junit.After;
@@ -16,7 +21,6 @@ import com.github.mkolisnyk.sirius.client.bdd.samples.pages.banking.HomePage;
 import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.PageFactory;
 import com.github.mkolisnyk.sirius.client.ui.controls.Edit;
-import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.*;
 
 
 public class PlainBankingTest {
@@ -88,15 +92,18 @@ public class PlainBankingTest {
                 .verify(exists(1))
                 .verify(visible())
                 .verify(enabled())
-                .click(CustomerDepositPage.class)
+                .perform(click())
+                .perform(waitFor(CustomerDepositPage.class))
             .navigate()
                 .verify(current())
             .field("Deposit Amount", Edit.class)
-                .setText("100")
+                .perform(clear())
+                .set(value("100"))
                 .verify(hasText("100"))
-            .getParent().field("Submit Deposit")
+            .get(parent()).field("Submit Deposit")
                 .verify(exists(1))
-                .click(CustomerDepositPage.class)
+                .perform(click())
+                .perform(waitFor(CustomerDepositPage.class))
             .verify(textPresent("Deposit Successful"))
             .field("Balance")
                 .verify(hasText("100"));

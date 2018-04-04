@@ -1,7 +1,7 @@
 package com.github.mkolisnyk.sirius.client.ui.controls;
 
-import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.disappears;
-import static com.github.mkolisnyk.sirius.client.ui.controls.ExpectedStates.exists;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.States.disappears;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.States.exists;
 
 import org.openqa.selenium.By;
 
