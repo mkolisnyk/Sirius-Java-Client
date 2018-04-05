@@ -1,5 +1,6 @@
 package com.github.mkolisnyk.sirius.cucumber.steps;
 
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.click;
 import static com.github.mkolisnyk.sirius.client.ui.predicates.States.invisible;
 import static com.github.mkolisnyk.sirius.client.ui.predicates.States.visible;
 
@@ -34,7 +35,7 @@ public class ControlSteps {
     public void clickOnTheButton(String name) throws Exception {
         Control control = Page.getCurrent().field(name);
         Assert.assertNotNull("Unable to find the '" + name + "' element on current page.", control);
-        control.click();
+        control.perform(click());
     }
     /**
      * Verifies if element specified by name exists on current page.

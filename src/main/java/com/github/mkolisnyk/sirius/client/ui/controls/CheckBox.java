@@ -1,4 +1,5 @@
 package com.github.mkolisnyk.sirius.client.ui.controls;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.click;
 import static com.github.mkolisnyk.sirius.client.ui.predicates.States.checked;
 
 import org.openqa.selenium.By;
@@ -27,9 +28,9 @@ public class CheckBox extends RadioButton {
      * Resets check mark from the field.
      * @return current control for further chain operations.
      */
-    public Editable uncheck() {
+    public CheckBox uncheck() {
         if (is(checked())) {
-            click();
+            perform(click());
         }
         return this;
     }

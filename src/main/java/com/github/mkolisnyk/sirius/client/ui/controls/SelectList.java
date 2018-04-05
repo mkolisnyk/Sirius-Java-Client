@@ -34,10 +34,12 @@ public class SelectList extends Editable {
     /**
      * Performs list item selection by the text specified.
      * @param value the value of item to select.
+     * @return current object for chain operations.
      */
-    public void selectByText(String value) {
+    public SelectList selectByText(String value) {
         this.verify(exists());
         this.getSelect().selectByVisibleText(value);
+        return this;
     }
 
     /* (non-Javadoc)

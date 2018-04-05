@@ -29,9 +29,9 @@ public class RadioButton extends Editable {
      * Sets check mark on the object if it's not already checked.
      * @return current element for further chain operations.
      */
-    public Editable check() {
+    public RadioButton check() {
         if (!is(checked())) {
-            click();
+            perform(click());
         }
         return this;
     }
@@ -40,7 +40,7 @@ public class RadioButton extends Editable {
     public Editable setValue(String value) {
         if (value.equalsIgnoreCase("y")
                 || value.equalsIgnoreCase("true")) {
-            this.click();
+            perform(click());
         }
         return this;
     }

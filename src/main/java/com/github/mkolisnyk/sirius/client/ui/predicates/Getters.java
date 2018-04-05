@@ -1,8 +1,14 @@
 package com.github.mkolisnyk.sirius.client.ui.predicates;
 
+import static com.github.mkolisnyk.sirius.client.ui.predicates.States.exists;
+
+import java.awt.Rectangle;
+
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
+
 import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
-import static com.github.mkolisnyk.sirius.client.ui.predicates.States.exists;
 
 /**
  * Collects predicates responsible for various get operations.
@@ -40,6 +46,7 @@ public final class Getters {
 
             @Override
             public String apply(Control item) {
+                item.verify(exists());
                 return item.getText();
             }
 
@@ -79,6 +86,33 @@ public final class Getters {
             public String apply(Control item) {
                 item.verify(exists());
                 return item.element().getAttribute(name);
+            }
+
+            @Override
+            public String description(Control item) {
+                return null;
+            }
+        };
+    }
+    /**
+     * Getter for element rectangular area.
+     * @return operation object which returns rectangular object with element dimensions.
+     */
+    public static Operation<Rectangle, Control> rectangle() {
+        return new Operation<Rectangle, Control>() {
+
+            @Override
+            public Rectangle apply(Control item) {
+                item.verify(exists());
+                Rectangle rect = new Rectangle();
+                //Point location = ((MobileElement) item.element()).getCoordinates().onPage();
+                Point location = item.element().getLocation();
+                Dimension size = item.element().getSize();
+                rect.x = location.x;
+                rect.y = location.y;
+                rect.width = size.width;
+                rect.height = size.height;
+                return rect;
             }
 
             @Override

@@ -1,5 +1,7 @@
 package com.github.mkolisnyk.sirius.cucumber.steps;
 
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.click;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +80,7 @@ public class TableSteps {
         if (firstLast.equals("last")) {
             index = control.getItemsCount() - 1;
         }
-        control.getSubItem(item, index).click();
+        control.getSubItem(item, index).perform(click());
     }
     /**
      * Stores the table row count in the context variable.

@@ -1,6 +1,9 @@
 package com.github.mkolisnyk.sirius.client.ui.controls;
 
-import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.attribute;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.clear;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.click;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.sendKeys;
+
 import org.openqa.selenium.By;
 
 import com.github.mkolisnyk.sirius.client.Configuration;
@@ -24,7 +27,7 @@ public class Edit extends Editable {
 
     @Override
     public String getText() {
-        return get(attribute("value"));
+        return getValue();
     }
 
     /* (non-Javadoc)
@@ -35,9 +38,9 @@ public class Edit extends Editable {
         if (Configuration.platform().isAndroidNative()) {
             this.getParent().hideKeyboard();
         }
-        this.click();
-        this.element().clear();
-        this.element().sendKeys(value);
+        perform(click());
+        perform(clear());
+        perform(sendKeys(value));
         if (Configuration.platform().isAndroidNative()) {
             this.getParent().hideKeyboard();
         }

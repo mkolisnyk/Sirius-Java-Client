@@ -234,7 +234,7 @@ public final class States {
 
             @Override
             public String description(Control parameter) {
-                return String.format("Element with locator '%s' doesn't have '%s' text.",
+                return String.format("Element with locator '%s' has '%s' text.",
                         parameter.getLocatorText(), text);
             }
         };

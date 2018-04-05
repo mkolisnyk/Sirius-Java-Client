@@ -1,5 +1,6 @@
 package com.github.mkolisnyk.sirius.cucumber.steps;
 
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.click;
 import static com.github.mkolisnyk.sirius.client.ui.predicates.States.current;
 
 import java.util.List;
@@ -9,7 +10,6 @@ import org.junit.Assert;
 
 import com.github.mkolisnyk.sirius.client.Driver;
 import com.github.mkolisnyk.sirius.client.ui.Page;
-
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -113,7 +113,7 @@ public class PageSteps {
      */
     @When("^(?:I |)click on the \"([^\"]*)\" (?:text|label)$")
     public void clickOnText(String message) {
-        Page.getCurrent().getTextControl(message).click();
+        Page.getCurrent().getTextControl(message).perform(click());
     }
 
 }

@@ -2,6 +2,7 @@ package com.github.mkolisnyk.sirius.client.bdd.samples.pages.banking;
 
 import org.openqa.selenium.WebDriver;
 
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.click;
 import com.github.mkolisnyk.sirius.client.ui.Alias;
 import com.github.mkolisnyk.sirius.client.ui.FindBy;
 import com.github.mkolisnyk.sirius.client.ui.Page;
@@ -25,7 +26,7 @@ public class CustomerDepositPage extends CustomerCommonPage {
 
     @Override
     public Page navigate() throws Exception {
-        this.buttonDeposit.click();
+        this.buttonDeposit.perform(click());
         return this;
     }
 }

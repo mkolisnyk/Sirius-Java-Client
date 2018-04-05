@@ -1,15 +1,13 @@
 package com.github.mkolisnyk.sirius.client.ui.controls;
 
-import static com.github.mkolisnyk.sirius.client.ui.predicates.States.current;
-//import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.attribute;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.attribute;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.rectangle;
 
 import java.awt.Rectangle;
 import java.util.HashMap;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,13 +15,10 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.github.mkolisnyk.sirius.client.ui.Page;
-import com.github.mkolisnyk.sirius.client.ui.PageFactory;
 import com.github.mkolisnyk.sirius.client.ui.ScrollTo;
 import com.github.mkolisnyk.sirius.client.ui.SubItem;
-import com.github.mkolisnyk.sirius.client.ui.predicates.States;
 import com.github.mkolisnyk.sirius.client.ui.predicates.Operation;
-
-import io.appium.java_client.MobileElement;
+import com.github.mkolisnyk.sirius.client.ui.predicates.States;
 
 /**
  * Major class for all control objects. All other control classes should be extended from this class.
@@ -265,37 +260,11 @@ public class Control {
     }
 
     /**
-     * Performs click on element.
-     */
-    public void click() {
-        verify(States.exists(Page.getTimeout()));
-        this.element().click();
-    }
-
-    /**
-     * Performs the click on element and returns the page object which corresponds to
-     * the page which should appear after click operation.
-     * @param pageClass the page class corresponding to the page to appear after click.
-     * @param <T> the class of expected page object.
-     * @return the initialized page object corresponding to the page which should appear
-     *     after the click on current element.
-     * @throws Exception any exception when some attributes are missing.
-     */
-    public <T extends Page> T click(Class<T> pageClass) throws Exception {
-        this.click();
-        T page = PageFactory.init(this.getDriver(), pageClass);
-        Assert.assertTrue(
-                String.format("The page of %s class didn't appear during specified timeout", pageClass.getName()),
-                page.is(current()));
-        return page;
-    }
-
-    /**
      * Gets element text.
      * @return element text.
      */
     public String getText() {
-        verify(States.exists(Page.getTimeout()));
+        verify(States.exists());
         return this.element().getText();
     }
 
@@ -305,22 +274,14 @@ public class Control {
      * @return element value.
      */
     public String getValue() {
-        return this.element().getAttribute("value");
+        return get(attribute("value"));
     }
     /**
      * Gets rectangular dimensions of current control.
      * @return current control dimantions.
      */
     public Rectangle getRect() {
-        verify(States.exists(Page.getTimeout()));
-        Rectangle rect = new Rectangle();
-        Point location = ((MobileElement) this.element()).getCoordinates().onPage();
-        Dimension size = this.element().getSize();
-        rect.x = location.x;
-        rect.y = location.y;
-        rect.width = size.width;
-        rect.height = size.height;
-        return rect;
+        return get(rectangle());
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.github.mkolisnyk.sirius.client.bdd.samples.pages.banking;
 
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.click;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.waitFor;
 import org.openqa.selenium.WebDriver;
 
 import com.github.mkolisnyk.sirius.client.ui.Alias;
@@ -30,8 +32,10 @@ public class HomePage extends Page {
     }
 
     public CustomerCommonPage loginAsCustomer(String name) throws Exception {
-        CustomerLoginPage loginPage = this.buttonCustomerLogin.click(CustomerLoginPage.class);
+        CustomerLoginPage loginPage = this.buttonCustomerLogin
+                .perform(click()).perform(waitFor(CustomerLoginPage.class));
         loginPage.selectUser.selectByText(name);
-        return loginPage.buttonLogin.click(CustomerCommonPage.class);
+        return loginPage.buttonLogin
+                .perform(click()).perform(waitFor(CustomerCommonPage.class));
     }
 }
