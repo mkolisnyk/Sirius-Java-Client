@@ -1,19 +1,32 @@
 package com.github.mkolisnyk.sirius.client.ui.predicates;
 
-import com.github.mkolisnyk.sirius.client.ui.controls.Control;
-import com.github.mkolisnyk.sirius.client.ui.controls.Edit;
+import com.github.mkolisnyk.sirius.client.ui.controls.Editable;
 
-public class Setters {
-    public static Operation<Control, Control> value(final String text) {
-        return new Operation<Control, Control>() {
+/**
+ * Collects predicates which are responsible for various set operations.
+ * @author Mykola Kolisnyk
+ *
+ */
+public final class Setters {
+    private Setters() {
+    }
+
+    /**
+     * Predicate for setting value for the control. It is applicable
+     * for controls of {@link Editable} or any extended classes.
+     * @param text the value to set.
+     * @return operation object which can be applicable for Editable elements.
+     */
+    public static Operation<Editable, Editable> value(final String text) {
+        return new Operation<Editable, Editable>() {
 
             @Override
-            public Control apply(Control item) {
+            public Editable apply(Editable item) {
                 return item.setValue(text);
             }
 
             @Override
-            public String description(Control item) {
+            public String description(Editable item) {
                 return null;
             }
         };

@@ -18,11 +18,11 @@ public class HomePage extends Page {
     @Alias("Customer Login")
     @FindBy(locator = "//button[text() = 'Customer Login']")
     public Control buttonCustomerLogin;
-    
+
     @Alias("Banking Manager Login")
     @FindBy(locator = "//button[text() = 'Bank Manager Login']")
     public Control buttonBankManagerLogin;
-    
+
     @Override
     public Page navigate() throws Exception {
         this.getDriver().get("http://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");

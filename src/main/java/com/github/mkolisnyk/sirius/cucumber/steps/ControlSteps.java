@@ -57,7 +57,7 @@ public class ControlSteps {
     @When("^(?:I |)enter \"(.*)\" text into the \"(.*)\" field$")
     public void enterValue(String text, String fieldName) throws Exception {
         Edit control = (Edit) verifyElementExists(fieldName);
-        control.setText(text);
+        control.setValue(text);
     }
     /**
      * Verifies that the field specified by the name contains some specific text.
@@ -67,8 +67,8 @@ public class ControlSteps {
      */
     @Then("^(?:I should see |)the \"(.*)\" field contains the \"(.*)\" text$")
     public void verifyFieldText(String fieldName, String text) throws Exception {
-        Control control = (Control) verifyElementExists(fieldName);
-        String actualText = control.getText();
+        Control control = verifyElementExists(fieldName);
+        String actualText = control.getValue();
         Assert.assertTrue(
             String.format("The '%s' field has unexpected text. Expected: '%s', Actual: '%s'",
                 fieldName,

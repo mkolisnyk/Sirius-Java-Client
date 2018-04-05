@@ -1,6 +1,7 @@
 package com.github.mkolisnyk.sirius.client.ui.controls;
 
 import static com.github.mkolisnyk.sirius.client.ui.predicates.States.current;
+//import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.attribute;
 
 import java.awt.Rectangle;
 import java.util.HashMap;
@@ -244,14 +245,6 @@ public class Control {
         return predicate.apply(this);
     }
     /**
-     * .
-     * @param predicate .
-     * @return .
-     */
-    public Control set(Operation<Control, Control> predicate) {
-        return predicate.apply(this);
-    }
-    /**
      * Checks some state of control depending on predicate specified.
      * @param predicate {@link Operation} expression returning boolean state value.
      * @return true if condition is met, false - otherwise.
@@ -312,18 +305,7 @@ public class Control {
      * @return element value.
      */
     public String getValue() {
-        return this.getText();
-    }
-    /**
-     * Common method for setting values. For extended classes
-     * it is supposed to set the value for the writable elements
-     * like edit boxes, check boxes, radio buttons. For others it shouldn't
-     * do anything.
-     * @param value the value to set.
-     * @return current control. It is needed for operation chains.
-     */
-    public Control setValue(String value) {
-        return this;
+        return this.element().getAttribute("value");
     }
     /**
      * Gets rectangular dimensions of current control.

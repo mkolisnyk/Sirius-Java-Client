@@ -7,13 +7,21 @@ import org.junit.Assert;
 import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.PageFactory;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
+import com.github.mkolisnyk.sirius.client.ui.controls.Editable;
 
 /**
- * .
+ * Collects predicates responsible for various actions on elements.
  * @author Mykola Kolisnyk
  *
  */
-public class Actions {
+public final class Actions {
+    private Actions() {
+    }
+    /**
+     * Predicate for click operation.
+     * @return the object with {@link Operation} interface
+     *      which is applicable for Control and returns the Control.
+     */
     public static Operation<Control, Control> click() {
         return new Operation<Control, Control>() {
 
@@ -30,6 +38,12 @@ public class Actions {
             }
         };
     }
+    /**
+     * Predicate for sending sequence of keys to specific element.
+     * @param keys the string containing keys to enter.
+     * @return the object with {@link Operation} interface
+     *      which is applicable for Control and returns the Control.
+     */
     public static Operation<Control, Control> sendKeys(final String keys) {
         return new Operation<Control, Control>() {
 
@@ -46,14 +60,19 @@ public class Actions {
             }
         };
     }
-    public static Operation<Control, Control> clear() {
-        return new Operation<Control, Control>() {
+    /**
+     * Predicate which clears field content.
+     * @return the object with {@link Operation} interface
+     *      which is applicable for Control and returns the Control.
+     */
+    public static Operation<Editable, Control> clear() {
+        return new Operation<Editable, Control>() {
 
             @Override
-            public Control apply(Control item) {
+            public Editable apply(Control item) {
                 item.verify(States.exists(Page.getTimeout()));
                 item.element().clear();
-                return item;
+                return (Editable) item;
             }
 
             @Override
@@ -62,6 +81,13 @@ public class Actions {
             }
         };
     }
+    /**
+     * Waits for specific page to appear.
+     * @param <T> the class of the page to wait for.
+     * @param pageClass the class of the page to wait for.
+     * @return the operation object which is applicable for control and
+     *      returns the instance of the expected page class.
+     */
     public static <T extends Page > Operation<T, Control> waitFor(final Class<T> pageClass) {
         return new Operation<T, Control>() {
 
@@ -83,10 +109,8 @@ public class Actions {
 
             @Override
             public String description(Control parameter) {
-                // TODO Auto-generated method stub
                 return null;
             }
-            
         };
     }
 }

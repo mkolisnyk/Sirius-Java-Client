@@ -17,7 +17,7 @@ public class AddCustomerPage extends BankManagerCommonPage {
     }
 
     @Alias("First Name")
-    @FindBy(locator = "//input[@type='text']")
+    @FindBy(locator = "//label[contains(text(), 'First Name')]/following-sibling::input[@type='text']")
     public Edit editFirstName;
     @Alias("Last Name")
     @FindBy(locator = "xpath=(//input[@type='text'])[2]")

@@ -1,5 +1,6 @@
 package com.github.mkolisnyk.sirius.client.ui.controls;
 
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.attribute;
 import org.openqa.selenium.By;
 
 import com.github.mkolisnyk.sirius.client.Configuration;
@@ -10,7 +11,7 @@ import com.github.mkolisnyk.sirius.client.ui.Page;
  * @author Mykola Kolisnyk
  *
  */
-public class Edit extends Control {
+public class Edit extends Editable {
 
     /**
      * Default constructor.
@@ -21,12 +22,16 @@ public class Edit extends Control {
         super(parentValue, locatorValue);
     }
 
-    /**
-     * Enters the text into the field.
-     * @param value the text to enter.
-     * @return current control to continue chain operations.
+    @Override
+    public String getText() {
+        return get(attribute("value"));
+    }
+
+    /* (non-Javadoc)
+     * @see com.github.mkolisnyk.sirius.client.ui.controls.Control#setValue(java.lang.String)
      */
-    public Control setText(String value) {
+    @Override
+    public Editable setValue(String value) {
         if (Configuration.platform().isAndroidNative()) {
             this.getParent().hideKeyboard();
         }
@@ -37,18 +42,5 @@ public class Edit extends Control {
             this.getParent().hideKeyboard();
         }
         return this;
-    }
-
-    @Override
-    public String getText() {
-        return super.element().getAttribute("value");
-    }
-
-    /* (non-Javadoc)
-     * @see com.github.mkolisnyk.sirius.client.ui.controls.Control#setValue(java.lang.String)
-     */
-    @Override
-    public Control setValue(String value) {
-        return this.setText(value);
     }
 }

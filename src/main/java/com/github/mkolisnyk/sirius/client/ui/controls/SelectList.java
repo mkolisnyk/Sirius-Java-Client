@@ -12,7 +12,7 @@ import com.github.mkolisnyk.sirius.client.ui.Page;
  * (e.g. drop-down lists, select lists, multi-select lists).
  * @author Mykola Kolisnyk
  */
-public class SelectList extends Control {
+public class SelectList extends Editable {
 
     /**
      * Default constructor which binds page the control belongs to and the locator to
@@ -44,7 +44,7 @@ public class SelectList extends Control {
      * @see com.github.mkolisnyk.sirius.client.ui.controls.Control#setValue(java.lang.String)
      */
     @Override
-    public Control setValue(String value) {
+    public Editable setValue(String value) {
         this.verify(exists());
         this.getSelect().selectByVisibleText(value);
         return this;

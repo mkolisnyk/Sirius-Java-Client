@@ -1,13 +1,14 @@
 package com.github.mkolisnyk.sirius.client.ui.predicates;
 
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.text;
+
 import java.lang.reflect.Field;
 
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import com.github.mkolisnyk.sirius.client.ui.FindBy;
+import com.github.mkolisnyk.sirius.client.Configuration;
 import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
-import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.text;
 
 /**
  * The container of Control state predicates.
@@ -15,6 +16,31 @@ import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.text;
  */
 public final class States {
     private States() {
+    }
+    /**
+     * Makes sure if element is checked.
+     * @return true - element checked, false otherwise.
+     */
+    public static Operation<Boolean, Control> checked() {
+        return new Operation<Boolean, Control>() {
+            @Override
+            public Boolean apply(Control element) {
+                element.verify(exists());
+                if (Configuration.platform().isIOSNative()) {
+                    String value = element.element().getAttribute("value");
+                    return value.equals("1");
+                } else {
+                    return element.element().getAttribute("checked").equals("true")
+                            || element.element().getAttribute("selected").equals("true");
+                }
+            }
+
+            @Override
+            public String description(Control parameter) {
+                return String.format("Element with locator '%s' is checked.",
+                        parameter.getLocatorText());
+            }
+        };
     }
     /**
      * Checks if control exists.
@@ -264,7 +290,7 @@ public final class States {
                             e.printStackTrace();
                         }
                         if (control == null
-                            || (!control.isExcludeFromSearch() && !control.is(exists(timeout)))) {
+                            || !control.isExcludeFromSearch() && !control.is(exists(timeout))) {
                             return false;
                         }
                     }
