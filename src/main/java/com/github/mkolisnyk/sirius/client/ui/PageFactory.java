@@ -38,19 +38,13 @@ public final class PageFactory {
         }
         return result;
     }
-
-    /**
-     * Major method which initialises page object instance based on WebDriver and page class
-     * provided. It processes all page and control related annotations and initialises all
-     * control fields.
-     * @param driver the WebDriver instance to pass to new page object instance.
-     * @param pageClass the page class which instance should be created.
-     * @param <T> the class of returning instance.
-     * @return initialised page class instance where all control fields are initialised and ready to use.
-     * @throws Exception mainly related to missing attributes of the fields to process.
-     */
-    public static <T extends Page> T init(WebDriver driver, Class<T> pageClass) throws Exception {
-        T page = pageClass.getConstructor(WebDriver.class).newInstance(driver);
+    private static <T extends Page> T init(WebDriver driver, Page parent, Class<?> pageClass) throws Exception {
+        T page = null;
+        if (parent == null) {
+            page = (T) pageClass.getConstructor(WebDriver.class).newInstance(driver);
+        } else {
+            page = (T) pageClass.getConstructor(parent.getClass(), WebDriver.class).newInstance(parent, driver);
+        }
         for (Field field : pageClass.getFields()) {
             FindBy[] locators = field.getAnnotationsByType(FindBy.class);
             if (locators != null && locators.length > 0) {
@@ -70,9 +64,24 @@ public final class PageFactory {
                     control.setExcludeFromSearch(locator.excludeFromSearch());
                     field.set(page, control);
                 }
+            } else if (Page.class.isAssignableFrom(field.getType())) {
+                field.set(page, init(driver, (Page) page, field.getType()));
             }
         }
         return page;
+    }
+    /**
+     * Major method which initialises page object instance based on WebDriver and page class
+     * provided. It processes all page and control related annotations and initialises all
+     * control fields.
+     * @param driver the WebDriver instance to pass to new page object instance.
+     * @param pageClass the page class which instance should be created.
+     * @param <T> the class of returning instance.
+     * @return initialised page class instance where all control fields are initialised and ready to use.
+     * @throws Exception mainly related to missing attributes of the fields to process.
+     */
+    public static <T extends Page> T init(WebDriver driver, Class<T> pageClass) throws Exception {
+        return init(driver, null, pageClass);
     }
 
     private static By toLocator(String input) {
