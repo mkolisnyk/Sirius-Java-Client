@@ -701,7 +701,34 @@ public class Page {
         }
         return null;
     }
-
+    /**
+     * Looks for nested page object by specific name.
+     * @param name the name of the sub-page to return.
+     * @return the instance of the page found.
+     * @throws Exception any reflection related exceptions.
+     */
+    public Page section(String name) throws Exception {
+        return section(name, Page.class);
+    }
+    /**
+     * Looks for nested page object by specific name.
+     * @param <T> the expected page class.
+     * @param name the name of the sub-page to return.
+     * @param pageType the target page object class.
+     * @return the instance of the page found.
+     * @throws Exception any reflection related exceptions.
+     */
+    public <T extends Page> T section(String name, Class<T> pageType) throws Exception {
+        for (Field field : this.getClass().getFields()) {
+            if (pageType.isAssignableFrom(field.getType())) {
+                Alias alias = field.getAnnotation(Alias.class);
+                if (alias != null && name.equals(alias.value())) {
+                    return (T) field.get(this);
+                }
+            }
+        }
+        return null;
+    }
     /**
      * Checks some state of page depending on predicate specified.
      * @param predicate {@link Operation} expression returning boolean state value.
