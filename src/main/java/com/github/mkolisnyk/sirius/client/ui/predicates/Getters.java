@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 
+import com.github.mkolisnyk.sirius.client.ui.AlertPage;
 import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 
@@ -18,7 +19,25 @@ import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 public final class Getters {
     private Getters() {
     }
+    /**
+     * Gets alert page instance.
+     * @return the alert page.
+     */
+    public static Operation<AlertPage, Page> alert() {
+        return new Operation<AlertPage, Page>() {
 
+            @Override
+            public AlertPage apply(Page page) {
+                AlertPage alert = new AlertPage(page.getDriver(), page);
+                return alert;
+            }
+
+            @Override
+            public String description(Page item) {
+                return null;
+            }
+        };
+    }
     /**
      * Predicate for retrieving parent object of the control.
      * @return operation object which is applicable for Control instance.

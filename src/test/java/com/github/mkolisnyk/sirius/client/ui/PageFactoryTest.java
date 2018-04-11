@@ -4,10 +4,12 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 
 import com.github.mkolisnyk.sirius.client.Configuration;
+import com.github.mkolisnyk.sirius.client.bdd.samples.pages.banking.HomePage;
 import com.github.mkolisnyk.sirius.client.mocks.MockWebDriver;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,7 +35,7 @@ public class PageFactoryTest {
             super(driverValue);
         }
 
-        @Alias("Sub-Page")
+        @Alias("Nested")
         public class SubPage extends Page {
 
             public SubPage(WebDriver driverValue) {
@@ -46,6 +48,7 @@ public class PageFactoryTest {
         @FindBy(locator = "name=test")
         public Control labelSample;
         
+        @Alias("Sub-Page")
         public SubPage subPage;
     }
     @Before
@@ -72,5 +75,21 @@ public class PageFactoryTest {
         Assert.assertNotNull(sample.subPage);
         Assert.assertNotNull(sample.subPage.getDriver());
         Assert.assertNotNull(sample.subPage.labelSubPageSample);
+    }
+    @Test
+    public void testSearchForNestedPage() throws Exception {
+        MultilevelPage sample = PageFactory.init(new MockWebDriver(), MultilevelPage.class);
+        Assert.assertNotNull(sample);
+        Assert.assertNotNull(sample.section("Sub-Page"));
+        Assert.assertNull(Page.forName("Nested"));
+    }
+    @Test
+    public void testInitNestedPageLevel2() throws Exception {
+        HomePage home = PageFactory.init(new MockWebDriver(), HomePage.class);
+        Assert.assertNotNull(home);
+        MultilevelPage multi = PageFactory.init(new MockWebDriver(), MultilevelPage.class);
+        Assert.assertNotNull(multi);
+        MultilevelPage.SubPage page = PageFactory.init(new MockWebDriver(), MultilevelPage.SubPage.class);
+        Assert.assertNotNull(page);
     }
 }

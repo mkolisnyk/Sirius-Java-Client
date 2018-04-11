@@ -1,6 +1,7 @@
 package com.github.mkolisnyk.sirius.client.ui;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.openqa.selenium.By;
@@ -41,7 +42,14 @@ public final class PageFactory {
     private static <T extends Page> T init(WebDriver driver, Page parent, Class<?> pageClass) throws Exception {
         T page = null;
         if (parent == null) {
-            page = (T) pageClass.getConstructor(WebDriver.class).newInstance(driver);
+            if (!pageClass.isMemberClass()
+                    || Modifier.isStatic(pageClass.getModifiers())) {
+                page = (T) pageClass.getConstructor(WebDriver.class).newInstance(driver);
+            } else {
+                Page parentPage = init(driver, null, (Class<?>) pageClass.getDeclaringClass());
+                page = (T) pageClass.getConstructor(pageClass.getDeclaringClass(), WebDriver.class)
+                        .newInstance(parentPage, driver);
+            }
         } else {
             page = (T) pageClass.getConstructor(parent.getClass(), WebDriver.class).newInstance(parent, driver);
         }
@@ -80,7 +88,7 @@ public final class PageFactory {
      * @return initialised page class instance where all control fields are initialised and ready to use.
      * @throws Exception mainly related to missing attributes of the fields to process.
      */
-    public static <T extends Page> T init(WebDriver driver, Class<T> pageClass) throws Exception {
+    public static <T extends Page> T init(WebDriver driver, Class<?> pageClass) throws Exception {
         return init(driver, null, pageClass);
     }
 

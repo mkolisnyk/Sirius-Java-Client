@@ -107,7 +107,6 @@ public class Page {
     public static Page forName(String name) throws Exception {
         return forName(name, getDefaultPagesPackage());
     }
-
     /**
      * Retrieves page object by it's logical name specified as the value of {@link Alias}
      * annotation. Mainly, it searches for classes extended from {@link Page} class inside
@@ -123,6 +122,9 @@ public class Page {
         Reflections reflections = new Reflections(pagePackage);
         Set<Class<? extends Page>> subTypes = reflections.getSubTypesOf(Page.class);
         for (Class<? extends Page> type : subTypes) {
+            if (type.isMemberClass()) {
+                continue;
+            }
             Alias annotation = type.getAnnotation(Alias.class);
             if (annotation != null && annotation.value().equals(name)) {
                 return PageFactory.init(Driver.current(), type);
