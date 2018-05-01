@@ -12,6 +12,7 @@ public enum Platform {
     IE("ie"),
     SAFARI("safari"),
     OPERA("opera"),
+    HTML_UNIT("htmlunit"),
     ANDROID_NATIVE("android_native"),
     ANDROID_WEB("android_web"),
     IOS_NATIVE("ios_native"),

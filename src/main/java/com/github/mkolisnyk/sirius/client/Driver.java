@@ -9,6 +9,7 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.safari.SafariDriver;
@@ -39,6 +40,7 @@ public final class Driver {
             put(Platform.IE.getValue(), InternetExplorerDriver.class);
             put(Platform.SAFARI.getValue(), SafariDriver.class);
             put(Platform.OPERA.getValue(), OperaDriver.class);
+            put(Platform.HTML_UNIT.getValue(), HtmlUnitDriver.class);
             put(Platform.ANDROID_NATIVE.getValue(), AndroidDriver.class);
             put(Platform.ANDROID_WEB.getValue(), AndroidDriver.class);
             put(Platform.IOS_NATIVE.getValue(), IOSDriver.class);
