@@ -19,4 +19,6 @@ public @interface Alias {
      * @return logical name to be assigned to the page/field.
      */
     String value();
+    int index() default -1;
+    String id() default "";
 }

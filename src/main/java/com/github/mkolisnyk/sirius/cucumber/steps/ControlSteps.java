@@ -14,6 +14,7 @@ import com.github.mkolisnyk.sirius.client.Context;
 import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 import com.github.mkolisnyk.sirius.client.ui.controls.Edit;
+import com.github.mkolisnyk.sirius.client.ui.controls.Editable;
 import com.udojava.evalex.Expression;
 
 import cucumber.api.DataTable;
@@ -57,7 +58,7 @@ public class ControlSteps {
      */
     @When("^(?:I |)enter \"(.*)\" text into the \"(.*)\" field$")
     public void enterValue(String text, String fieldName) throws Exception {
-        Edit control = (Edit) verifyElementExists(fieldName);
+        Editable control = (Editable) verifyElementExists(fieldName);
         control.setValue(text);
     }
     /**
