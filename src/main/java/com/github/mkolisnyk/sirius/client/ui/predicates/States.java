@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.github.mkolisnyk.sirius.client.Configuration;
+import com.github.mkolisnyk.sirius.client.ui.Alias;
 import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 
@@ -21,6 +22,7 @@ public final class States {
      * Makes sure if element is checked.
      * @return true - element checked, false otherwise.
      */
+    @Alias("Checked")
     public static Operation<Boolean, Control> checked() {
         return new Operation<Boolean, Control>() {
             @Override
@@ -69,6 +71,7 @@ public final class States {
      * .
      * @return .
      */
+    @Alias("Exists")
     public static Operation<Boolean, Control> exists() {
         return exists(Page.getTimeout());
     }
@@ -98,6 +101,7 @@ public final class States {
      * .
      * @return .
      */
+    @Alias("Disappears")
     public static Operation<Boolean, Control> disappears() {
         return disappears(Page.getTimeout());
     }
@@ -128,6 +132,7 @@ public final class States {
      * .
      * @return .
      */
+    @Alias("Visible")
     public static Operation<Boolean, Control> visible() {
         return visible(Page.getTimeout());
     }
@@ -157,6 +162,7 @@ public final class States {
      * .
      * @return .
      */
+    @Alias("Invisible")
     public static Operation<Boolean, Control> invisible() {
         return invisible(Page.getTimeout());
     }
@@ -187,6 +193,7 @@ public final class States {
      * .
      * @return .
      */
+    @Alias("Enabled")
     public static Operation<Boolean, Control> enabled() {
         return enabled(Page.getTimeout());
     }
@@ -217,6 +224,7 @@ public final class States {
      * .
      * @return .
      */
+    @Alias("Disabled")
     public static Operation<Boolean, Control> disabled() {
         return disabled(Page.getTimeout());
     }
@@ -225,6 +233,7 @@ public final class States {
      * @param text the text to check.
      * @return true if element has specified text. False - otherwise.
      */
+    @Alias("Has Text")
     public static Operation<Boolean, Control> hasText(final String text) {
         return new Operation<Boolean, Control>() {
             @Override

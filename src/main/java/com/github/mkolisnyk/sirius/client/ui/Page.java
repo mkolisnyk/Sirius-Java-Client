@@ -25,6 +25,7 @@ import org.reflections.Reflections;
 import com.github.mkolisnyk.sirius.client.Driver;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 import com.github.mkolisnyk.sirius.client.ui.predicates.Operation;
+import com.github.mkolisnyk.sirius.cucumber.steps.PageSteps;
 
 import io.appium.java_client.AppiumDriver;
 

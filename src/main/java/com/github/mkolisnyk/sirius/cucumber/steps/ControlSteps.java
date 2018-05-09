@@ -1,20 +1,23 @@
 package com.github.mkolisnyk.sirius.cucumber.steps;
 
 import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.click;
-import static com.github.mkolisnyk.sirius.client.ui.predicates.States.invisible;
-import static com.github.mkolisnyk.sirius.client.ui.predicates.States.visible;
 
+import java.lang.reflect.Method;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 
 import com.github.mkolisnyk.sirius.client.Context;
+import com.github.mkolisnyk.sirius.client.ui.Alias;
 import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
-import com.github.mkolisnyk.sirius.client.ui.controls.Edit;
 import com.github.mkolisnyk.sirius.client.ui.controls.Editable;
+import com.github.mkolisnyk.sirius.client.ui.predicates.Operation;
+import com.google.common.util.concurrent.Service.State;
 import com.udojava.evalex.Expression;
 
 import cucumber.api.DataTable;
@@ -90,23 +93,46 @@ public class ControlSteps {
             verifyElementExists(element);
         }
     }
+    private Method getVerifyPredicate(String name) {
+        for (Method method : State.class.getDeclaredMethods()) {
+            Alias alias = method.getAnnotation(Alias.class);
+            if (alias != null && alias.value().equalsIgnoreCase(name)) {
+                return method;
+            }
+        }
+        return null;
+    }
     /**
      * Checks multiple state of multiple elements.
      * @param criteria the data table showing multiple fields criteria.
      * @throws Throwable either reflection problems (like access) or missing attributes.
      */
-    @Then("^(?:I should see |)the (?:elements|buttons|controls) with the following visibility:$")
+    @Then("^(?:I should see |)the (?:elements|buttons|controls) with the following properties:$")
     public void verifyElementsWithVisibility(DataTable criteria)
             throws Throwable {
 
         List<Map<String, String>> content = criteria.asMaps(String.class,
                 String.class);
         for (Map<String, String> row : content) {
-
+            Set<String> properties = row.keySet();
             String element = row.get("Element");
-            String shown = row.get("Shown");
             Control control = Page.getCurrent().field(element);
-            Assert.assertNotNull("Element with the '" + element + "' alias wasn't declared on current page",
+            for (String property : properties) {
+                Method predicate = this.getVerifyPredicate(property);
+                String value = row.get(property);
+                if (predicate.getParameterCount() > 0 && StringUtils.isNotBlank(value)) {
+                    control.verify((Operation<Boolean, Control>) predicate.invoke(null, value));
+                } else {
+                    if (StringUtils.isNotBlank(value) && !value.trim().equalsIgnoreCase("-")) {
+                        Operation<Boolean, Control> operation = (Operation<Boolean, Control>) predicate.invoke(null);
+                        boolean expectedValue = value.equalsIgnoreCase("Y");
+                        Assert.assertEquals("Unable to verify that " + operation.description(control),
+                                expectedValue,
+                                control.is(operation));
+                    }
+                }
+            }
+            /*Assert.assertNotNull("Element with the '" + element + "' alias wasn't declared on current page",
                     control);
             if (shown.equals("Y")) {
                 Assert.assertTrue(String.format("Element \"%s\" isn't visible", element),
@@ -114,7 +140,7 @@ public class ControlSteps {
             } else {
                 Assert.assertTrue(String.format("Element \"%s\" is unexpectly visible", element),
                         control.is(invisible()));
-            }
+            }*/
         }
     }
     /**

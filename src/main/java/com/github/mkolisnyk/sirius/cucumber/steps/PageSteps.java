@@ -10,6 +10,8 @@ import org.junit.Assert;
 
 import com.github.mkolisnyk.sirius.client.Driver;
 import com.github.mkolisnyk.sirius.client.ui.Page;
+import com.github.mkolisnyk.sirius.client.ui.controls.Edit;
+
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
