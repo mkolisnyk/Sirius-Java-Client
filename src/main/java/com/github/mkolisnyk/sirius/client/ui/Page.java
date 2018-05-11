@@ -25,7 +25,6 @@ import org.reflections.Reflections;
 import com.github.mkolisnyk.sirius.client.Driver;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 import com.github.mkolisnyk.sirius.client.ui.predicates.Operation;
-import com.github.mkolisnyk.sirius.cucumber.steps.PageSteps;
 
 import io.appium.java_client.AppiumDriver;
 
@@ -731,6 +730,16 @@ public class Page {
             }
         }
         return null;
+    }
+    /**
+     * Method responsible for switching to frame/window represented by
+     * current page object. Usually, it does nothing but if alias declares index or
+     * some form of id, it is used to locate the the frame or new window.
+     * @return current page object.
+     */
+    public Page switchTo() {
+        //this.get
+        return this;
     }
     /**
      * Checks some state of page depending on predicate specified.
