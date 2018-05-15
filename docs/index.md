@@ -42,6 +42,23 @@ Javadoc pages can be found [here](/Sirius-Java-Client/javadoc/)
 
 ## Examples
 
+ * [Driver](/Sirius-Java-Client/examples/driver)
+ * [Configuration](/Sirius-Java-Client/examples/configuration)
+ * Pages and Controls
+   * [General way of declaring pages and elements](/Sirius-Java-Client/examples/pages_design)
+   * [Locating elements](/Sirius-Java-Client/examples/locating_elements)
+   * [Platform-specific identifiers](/Sirius-Java-Client/examples/platform_specific_identifiers)
+   * [Dealing with complex controls](/Sirius-Java-Client/examples/complex_controls)
+   * [Using custom controls](/Sirius-Java-Client/examples/custom_controls)
+   * [Using logical names](/Sirius-Java-Client/examples/logical_names)
+   * [Verify page is current](/Sirius-Java-Client/examples/verify_current_page)
+   * [Other page-level verifications](/Sirius-Java-Client/examples/other_page_level_verifications)
+   * [Control verifications](/Sirius-Java-Client/examples/control_verifications)
+ * Cucumber-JVM keywords
+   * [Control steps](/Sirius-Java-Client/examples/driver)
+   * [Table steps](/Sirius-Java-Client/examples/driver)
+   * [Page steps](/Sirius-Java-Client/examples/driver)
+
 ## Authors
 
 Myk Kolisnyk (kolesnik.nickolay@gmail.com) 
