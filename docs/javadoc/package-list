@@ -1,4 +1,5 @@
 com.github.mkolisnyk.sirius.client
 com.github.mkolisnyk.sirius.client.ui
 com.github.mkolisnyk.sirius.client.ui.controls
+com.github.mkolisnyk.sirius.client.ui.predicates
 com.github.mkolisnyk.sirius.cucumber.steps

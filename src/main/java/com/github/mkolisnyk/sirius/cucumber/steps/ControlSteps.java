@@ -17,7 +17,7 @@ import com.github.mkolisnyk.sirius.client.ui.Page;
 import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 import com.github.mkolisnyk.sirius.client.ui.controls.Editable;
 import com.github.mkolisnyk.sirius.client.ui.predicates.Operation;
-import com.google.common.util.concurrent.Service.State;
+import com.github.mkolisnyk.sirius.client.ui.predicates.States;
 import com.udojava.evalex.Expression;
 
 import cucumber.api.DataTable;
@@ -94,7 +94,8 @@ public class ControlSteps {
         }
     }
     private Method getVerifyPredicate(String name) {
-        for (Method method : State.class.getDeclaredMethods()) {
+        Method[] methods = States.class.getDeclaredMethods();
+        for (Method method : methods) {
             Alias alias = method.getAnnotation(Alias.class);
             if (alias != null && alias.value().equalsIgnoreCase(name)) {
                 return method;
@@ -118,7 +119,12 @@ public class ControlSteps {
             String element = row.get("Element");
             Control control = Page.getCurrent().field(element);
             for (String property : properties) {
+                if (property.trim().equalsIgnoreCase("Element")) {
+                    continue;
+                }
                 Method predicate = this.getVerifyPredicate(property);
+                Assert.assertNotNull(String.format("Unable to find suitable operation for '%s'", property),
+                        predicate);
                 String value = row.get(property);
                 if (predicate.getParameterCount() > 0 && StringUtils.isNotBlank(value)) {
                     control.verify((Operation<Boolean, Control>) predicate.invoke(null, value));
@@ -132,15 +138,6 @@ public class ControlSteps {
                     }
                 }
             }
-            /*Assert.assertNotNull("Element with the '" + element + "' alias wasn't declared on current page",
-                    control);
-            if (shown.equals("Y")) {
-                Assert.assertTrue(String.format("Element \"%s\" isn't visible", element),
-                        control.is(visible()));
-            } else {
-                Assert.assertTrue(String.format("Element \"%s\" is unexpectly visible", element),
-                        control.is(invisible()));
-            }*/
         }
     }
     /**

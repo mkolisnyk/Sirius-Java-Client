@@ -289,12 +289,12 @@ public final class States {
         return new Operation<Boolean, Page>() {
             @Override
             public Boolean apply(Page page) {
-                Field[] fields = this.getClass().getFields();
+                Field[] fields = page.getClass().getFields();
                 for (Field field : fields) {
                     if (Control.class.isAssignableFrom(field.getType())) {
                         Control control = null;
                         try {
-                            control = (Control) field.get(this);
+                            control = (Control) field.get(page);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

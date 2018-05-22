@@ -62,6 +62,12 @@ public final class Context {
         contextVariables.put(getThreadName(), new HashMap<String, Object>());
     }
     /**
+     * Resets all internal data storage for all context variables.
+     */
+    public static void reset() {
+        contextVariables = new ConcurrentHashMap<String, Map<String, Object>>();
+    }
+    /**
      * Lists all available variables for current thread.
      * @return the set of variables available for current thread.
      */

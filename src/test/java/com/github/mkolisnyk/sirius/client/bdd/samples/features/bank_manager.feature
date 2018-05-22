@@ -15,6 +15,15 @@ Feature: Bank Manager
       | First Name |
       | Last Name  |
       | Post Code  |
+    And I should see the elements with the following properties:
+	  | Element    | Exists | Visible | Enabled | Has Text |
+      | First Name | Y      |        |  -       |          |
+      | Last Name  |        |   Y    |  -       |          |
+      | Post Code  | -      |        |  Y       |          |
+    And at least one of the following elements is shown:
+      | First Name |
+      | Last Name  |
+      | Post Code  |
     And the "Submit" field is available
     When I populate current page with the following data:
       | Field      | Value |
@@ -26,6 +35,12 @@ Feature: Bank Manager
       | First Name | Test  |
       | Last Name  | User  |
       | Post Code  | WWW99 |
+      | Post Code  | WW9   |
+    And I should see the elements with the following properties:
+	  | Element    | Exists | Visible | Enabled | Has Text |
+      | First Name | Y      |        |  -       | Test     |
+      | Last Name  |        |   Y    |  -       | User     |
+      | Post Code  | -      |        |  Y       | WWW99    |
     When I click on the "Submit" button
     And accept the alert message
     Then I should see the "Add Customer" page
