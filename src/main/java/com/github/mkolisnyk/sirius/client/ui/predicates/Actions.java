@@ -23,18 +23,13 @@ public final class Actions {
      *      which is applicable for Control and returns the Control.
      */
     public static Operation<Control, Control> click() {
-        return new Operation<Control, Control>() {
+        return new NonDescriptive<Control, Control>() {
 
             @Override
             public Control apply(Control item) {
                 item.verify(States.exists(Page.getTimeout()));
                 item.element().click();
                 return item;
-            }
-
-            @Override
-            public String description(Control item) {
-                return null;
             }
         };
     }
@@ -45,18 +40,13 @@ public final class Actions {
      *      which is applicable for Control and returns the Control.
      */
     public static Operation<Control, Control> sendKeys(final String keys) {
-        return new Operation<Control, Control>() {
+        return new NonDescriptive<Control, Control>() {
 
             @Override
             public Control apply(Control item) {
                 item.verify(States.exists(Page.getTimeout()));
                 item.element().sendKeys(keys);
                 return item;
-            }
-
-            @Override
-            public String description(Control item) {
-                return null;
             }
         };
     }
@@ -66,18 +56,13 @@ public final class Actions {
      *      which is applicable for Control and returns the Control.
      */
     public static Operation<Editable, Control> clear() {
-        return new Operation<Editable, Control>() {
+        return new NonDescriptive<Editable, Control>() {
 
             @Override
             public Editable apply(Control item) {
                 item.verify(States.exists(Page.getTimeout()));
                 item.element().clear();
                 return (Editable) item;
-            }
-
-            @Override
-            public String description(Control item) {
-                return null;
             }
         };
     }
@@ -89,7 +74,7 @@ public final class Actions {
      *      returns the instance of the expected page class.
      */
     public static <T extends Page > Operation<T, Control> waitFor(final Class<T> pageClass) {
-        return new Operation<T, Control>() {
+        return new NonDescriptive<T, Control>() {
 
             @Override
             public T apply(Control item) {
@@ -105,11 +90,6 @@ public final class Actions {
                                 pageClass.getName()),
                         page.is(current()));
                 return page;
-            }
-
-            @Override
-            public String description(Control parameter) {
-                return null;
             }
         };
     }

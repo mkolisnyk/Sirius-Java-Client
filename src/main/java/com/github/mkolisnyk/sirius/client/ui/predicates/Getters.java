@@ -24,17 +24,12 @@ public final class Getters {
      * @return the alert page.
      */
     public static Operation<AlertPage, Page> alert() {
-        return new Operation<AlertPage, Page>() {
+        return new NonDescriptive<AlertPage, Page>() {
 
             @Override
             public AlertPage apply(Page page) {
                 AlertPage alert = new AlertPage(page.getDriver(), page);
                 return alert;
-            }
-
-            @Override
-            public String description(Page item) {
-                return null;
             }
         };
     }
@@ -43,16 +38,11 @@ public final class Getters {
      * @return operation object which is applicable for Control instance.
      */
     public static Operation<Page, Control> parent() {
-        return new Operation<Page, Control>() {
+        return new NonDescriptive<Page, Control>() {
 
             @Override
             public Page apply(Control item) {
                 return item.getParent();
-            }
-
-            @Override
-            public String description(Control item) {
-                return null;
             }
         };
     }
@@ -61,17 +51,12 @@ public final class Getters {
      * @return operation object which is applicable for Control instance.
      */
     public static Operation<String, Control> text() {
-        return new Operation<String, Control>() {
+        return new NonDescriptive<String, Control>() {
 
             @Override
             public String apply(Control item) {
                 item.verify(exists());
                 return item.getText();
-            }
-
-            @Override
-            public String description(Control item) {
-                return null;
             }
         };
     }
@@ -80,16 +65,11 @@ public final class Getters {
      * @return operation object which is applicable for Control instance.
      */
     public static Operation<String, Control> value() {
-        return new Operation<String, Control>() {
+        return new NonDescriptive<String, Control>() {
 
             @Override
             public String apply(Control item) {
                 return item.getValue();
-            }
-
-            @Override
-            public String description(Control item) {
-                return null;
             }
         };
     }
@@ -99,17 +79,12 @@ public final class Getters {
      * @return operation object which is applicable for Control instance.
      */
     public static Operation<String, Control> attribute(final String name) {
-        return new Operation<String, Control>() {
+        return new NonDescriptive<String, Control>() {
 
             @Override
             public String apply(Control item) {
                 item.verify(exists());
                 return item.element().getAttribute(name);
-            }
-
-            @Override
-            public String description(Control item) {
-                return null;
             }
         };
     }
@@ -118,7 +93,7 @@ public final class Getters {
      * @return operation object which returns rectangular object with element dimensions.
      */
     public static Operation<Rectangle, Control> rectangle() {
-        return new Operation<Rectangle, Control>() {
+        return new NonDescriptive<Rectangle, Control>() {
 
             @Override
             public Rectangle apply(Control item) {
@@ -132,11 +107,6 @@ public final class Getters {
                 rect.width = size.width;
                 rect.height = size.height;
                 return rect;
-            }
-
-            @Override
-            public String description(Control item) {
-                return null;
             }
         };
     }

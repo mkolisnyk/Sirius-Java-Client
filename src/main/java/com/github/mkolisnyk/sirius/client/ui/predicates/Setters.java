@@ -18,16 +18,11 @@ public final class Setters {
      * @return operation object which can be applicable for Editable elements.
      */
     public static Operation<Editable, Editable> value(final String text) {
-        return new Operation<Editable, Editable>() {
+        return new NonDescriptive<Editable, Editable>() {
 
             @Override
             public Editable apply(Editable item) {
                 return item.setValue(text);
-            }
-
-            @Override
-            public String description(Editable item) {
-                return null;
             }
         };
     }
