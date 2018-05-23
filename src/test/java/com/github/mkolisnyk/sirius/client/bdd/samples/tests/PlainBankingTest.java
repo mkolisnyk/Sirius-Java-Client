@@ -54,7 +54,7 @@ public class PlainBankingTest {
         depositPage.buttonSubmitDeposit
             .perform(click())
             .perform(waitFor(CustomerDepositPage.class));
-        Assert.assertTrue(depositPage.isTextPresent("Deposit Successful"));
+        Assert.assertTrue(depositPage.is(textPresent("Deposit Successful")));
         Assert.assertEquals("100", depositPage.labelBalance.getText());
     }
     @Test
@@ -69,7 +69,7 @@ public class PlainBankingTest {
                 .getParent().field("Submit Deposit")
                 .perform(click())
                 .perform(waitFor(CustomerDepositPage.class));
-        Assert.assertTrue(depositPage.isTextPresent("Deposit Successful"));
+        Assert.assertTrue(depositPage.is(textPresent("Deposit Successful")));
         Assert.assertEquals("100", depositPage.labelBalance.getText());
     }
     @Test
@@ -101,9 +101,10 @@ public class PlainBankingTest {
             .navigate().verify(current()))
             .loginAsCustomer("Harry Potter")
             .field("Deposit")
-                .verify(exists(5))
-                .verify(visible())
-                .verify(enabled())
+                .verify(
+                        exists(5),
+                        visible(),
+                        enabled())
                 .perform(click())
                 .perform(waitFor(CustomerDepositPage.class))
             .navigate()

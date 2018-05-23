@@ -103,6 +103,8 @@ public final class PageFactory {
             return By.cssSelector(input.substring("css=".length()));
         } else if (input.matches("^class=(.*)")) {
             return By.className(input.substring("class=".length()));
+        } else if (input.matches("^link=(.*)")) {
+            return By.linkText(input.substring("link=".length()));
         } else {
             return By.id(input);
         }

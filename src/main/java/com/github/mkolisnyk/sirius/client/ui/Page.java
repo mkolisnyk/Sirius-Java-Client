@@ -1,5 +1,6 @@
 package com.github.mkolisnyk.sirius.client.ui;
 
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.source;
 import static com.github.mkolisnyk.sirius.client.ui.predicates.States.current;
 import static com.github.mkolisnyk.sirius.client.ui.predicates.States.exists;
 
@@ -274,10 +275,10 @@ public class Page {
      * @param text the text value to wait for.
      * @return true - the text label is available on screen, false - otherwise.
      */
-    public boolean isTextPresent(String text) {
+    /*public boolean isTextPresent(String text) {
         Control element = getTextControl(text);
         return element.is(exists());
-    }
+    }*/
 
     /**
      * Captures the screenshot of current page.
@@ -302,15 +303,6 @@ public class Page {
         File output = new File(destination);
         FileUtils.copyFile(srcFile, output);
         return output;
-    }
-
-    /**
-     * Gets the page source code. Usually it is page HTML (for web) or at least some
-     * XML representation (for WebDriver implementation for other platforms).
-     * @return current page source.
-     */
-    public String getSource() {
-        return this.getDriver().getPageSource();
     }
 
     /**
@@ -434,7 +426,7 @@ public class Page {
             }
         }
         String prevState = "";
-        String currentState = this.getSource();
+        String currentState = this.get(source());
         int times = 0;
         final int maxTries = 50;
         while (!currentState.equals(prevState)) {
@@ -450,7 +442,7 @@ public class Page {
             }
             times++;
             prevState = currentState;
-            currentState = this.getSource();
+            currentState = this.get(source());
         }
         return true;
     }
@@ -475,13 +467,13 @@ public class Page {
             return false;
         }
         String prevState = "";
-        String currentState = this.getSource();
+        String currentState = this.get(source());
         while (!currentState.equals(prevState) && this.swipeScreen(true, up, true)) {
             if (control.is(exists(TINY_TIMEOUT))) {
                 return true;
             }
             prevState = currentState;
-            currentState = this.getSource();
+            currentState = this.get(source());
         }
         return false;
     }
@@ -733,13 +725,34 @@ public class Page {
     }
     /**
      * Method responsible for switching to frame/window represented by
-     * current page object. Usually, it does nothing but if alias declares index or
-     * some form of id, it is used to locate the the frame or new window.
+     * current page object.
      * @return current page object.
      */
-    public Page switchTo() {
-        //this.get
+    public Page switchToLast() {
+        Set<String> handles = this.getDriver().getWindowHandles();
+        for (String handle : handles) {
+            this.getDriver().switchTo().window(handle);
+        }
         return this;
+    }
+    /**
+     * Switches to original page/frame.
+     * @return current page object.
+     */
+    public Page switchToDefault() {
+        this.getDriver().switchTo().defaultContent();
+        Set<String> handles = this.getDriver().getWindowHandles();
+        this.getDriver().switchTo().window(handles.iterator().next());
+        return this;
+    }
+    /**
+     * .
+     * @param <T> .
+     * @param predicate .
+     * @return .
+     */
+    public <T> T get(Operation<T, Page> predicate) {
+        return predicate.apply(this);
     }
     /**
      * Checks some state of page depending on predicate specified.
@@ -753,11 +766,22 @@ public class Page {
     /**
      * Verifies that page has some specific state and asserts the error if condition is not met.
      * @param predicate {@link Operation} expression returning boolean state value.
-     * @return current control.
+     * @return current page.
      */
     public Page verify(Operation<Boolean, Page> predicate) {
         Assert.assertTrue("Unable to verify that " + predicate.description(this),
                 is(predicate));
+        return this;
+    }
+    /**
+     * Verifies that page has multiple states in place.
+     * @param predicates the list of predicates to check.
+     * @return current page.
+     */
+    public Page verify(Operation<Boolean, Page>... predicates) {
+        for (Operation<Boolean, Page> predicate : predicates) {
+            verify(predicate);
+        }
         return this;
     }
 }

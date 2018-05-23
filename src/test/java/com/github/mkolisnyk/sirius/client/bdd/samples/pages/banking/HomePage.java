@@ -2,6 +2,7 @@ package com.github.mkolisnyk.sirius.client.bdd.samples.pages.banking;
 
 import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.click;
 import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.waitFor;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Setters.value;
 import org.openqa.selenium.WebDriver;
 
 import com.github.mkolisnyk.sirius.client.ui.Alias;
@@ -34,7 +35,7 @@ public class HomePage extends Page {
     public CustomerCommonPage loginAsCustomer(String name) throws Exception {
         CustomerLoginPage loginPage = this.buttonCustomerLogin
                 .perform(click()).perform(waitFor(CustomerLoginPage.class));
-        loginPage.selectUser.selectByText(name);
+        loginPage.selectUser.set(value(name));
         return loginPage.buttonLogin
                 .perform(click()).perform(waitFor(CustomerCommonPage.class));
     }

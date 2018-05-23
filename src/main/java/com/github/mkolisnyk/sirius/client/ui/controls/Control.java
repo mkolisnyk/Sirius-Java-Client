@@ -2,6 +2,7 @@ package com.github.mkolisnyk.sirius.client.ui.controls;
 
 import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.attribute;
 import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.rectangle;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.States.exists;
 
 import java.awt.Rectangle;
 import java.util.HashMap;
@@ -15,10 +16,10 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.github.mkolisnyk.sirius.client.ui.Page;
+import com.github.mkolisnyk.sirius.client.ui.PageFactory;
 import com.github.mkolisnyk.sirius.client.ui.ScrollTo;
 import com.github.mkolisnyk.sirius.client.ui.SubItem;
 import com.github.mkolisnyk.sirius.client.ui.predicates.Operation;
-import com.github.mkolisnyk.sirius.client.ui.predicates.States;
 
 /**
  * Major class for all control objects. All other control classes should be extended from this class.
@@ -207,6 +208,19 @@ public class Control {
     }
 
     /**
+     * Performs switch to frame defined via control. Typically it's about iframe objects.
+     * @param <T> the page class to switch to.
+     * @param pageClass  the page class to switch to.
+     * @return initialised page which corresponds to the selected frame.
+     * @throws Exception any exception during page initialisation.
+     */
+    public <T extends Page> T switchTo(Class<T> pageClass) throws Exception {
+        verify(exists());
+        this.getDriver().switchTo().frame(this.element());
+        return PageFactory.init(getDriver(), pageClass);
+    }
+
+    /**
      * Common method for various actions waiting for some element event to happen.
      * @param condition the expected condition predicate.
      * @param timeout the time limit to wait for event to happen.
@@ -258,13 +272,23 @@ public class Control {
                 is(predicate));
         return this;
     }
-
+    /**
+     * Verifies that control has multiple states in place.
+     * @param predicates the list of predicates to check.
+     * @return current control.
+     */
+    public Control verify(Operation<Boolean, Control>... predicates) {
+        for (Operation<Boolean, Control> predicate : predicates) {
+            verify(predicate);
+        }
+        return this;
+    }
     /**
      * Gets element text.
      * @return element text.
      */
     public String getText() {
-        verify(States.exists());
+        verify(exists());
         return this.element().getText();
     }
 

@@ -19,18 +19,4 @@ public @interface Alias {
      * @return logical name to be assigned to the page/field.
      */
     String value();
-    /**
-     * Optional parameter which is responsible for element index.
-     * Typically it is used for pages or frames which are normally located
-     * either by id or index.
-     * @return element/page index
-     */
-    int index() default -1;
-    /**
-     * Optional parameter which is responsible for element id.
-     * Typically it is used for pages or frames which are normally located
-     * either by id or index.
-     * @return element/page id
-     */
-    String id() default "";
 }

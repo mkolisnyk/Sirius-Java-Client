@@ -2,6 +2,7 @@ package com.github.mkolisnyk.sirius.cucumber.steps;
 
 import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.click;
 import static com.github.mkolisnyk.sirius.client.ui.predicates.States.current;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.States.textPresent;
 
 import java.util.List;
 import java.util.Map;
@@ -64,8 +65,7 @@ public class PageSteps {
      */
     @Then("^(?:I should see |)the \"(.*)\" (?:text|label) is shown$")
     public void verifyTextPresent(String text) {
-        Assert.assertTrue("Unable to find text: '" + text + "'",
-                Page.getCurrent().isTextPresent(text));
+        Page.getCurrent().verify(textPresent(text));
     }
     /**
      * Verifies multiple labels presence. It will throw an assertion error

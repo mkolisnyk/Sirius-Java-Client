@@ -1,6 +1,7 @@
 package com.github.mkolisnyk.sirius.client.ui.predicates;
 
 import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.text;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.States.exists;
 
 import java.lang.reflect.Field;
 
@@ -257,7 +258,8 @@ public final class States {
         return new Operation<Boolean, Page>() {
             @Override
             public Boolean apply(Page page) {
-                return page.isTextPresent(text);
+                Control element = page.getTextControl(text);
+                return element.is(exists());
             }
 
             @Override
@@ -294,6 +296,7 @@ public final class States {
                     if (Control.class.isAssignableFrom(field.getType())) {
                         Control control = null;
                         try {
+                            System.out.println("Checking: " + field.getName());
                             control = (Control) field.get(page);
                         } catch (Exception e) {
                             e.printStackTrace();

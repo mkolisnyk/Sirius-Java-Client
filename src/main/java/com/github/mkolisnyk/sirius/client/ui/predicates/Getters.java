@@ -34,6 +34,20 @@ public final class Getters {
         };
     }
     /**
+     * Gets the page source code. Usually it is page HTML (for web) or at least some
+     * XML representation (for WebDriver implementation for other platforms).
+     * @return current page source.
+     */
+    public static Operation<String, Page> source() {
+        return new NonDescriptive<String, Page>() {
+
+            @Override
+            public String apply(Page page) {
+                return page.getDriver().getPageSource();
+            }
+        };
+    }
+    /**
      * Predicate for retrieving parent object of the control.
      * @return operation object which is applicable for Control instance.
      */

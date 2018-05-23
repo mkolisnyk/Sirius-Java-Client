@@ -47,8 +47,6 @@ public class SelectList extends Editable {
      */
     @Override
     public Editable setValue(String value) {
-        this.verify(exists());
-        this.getSelect().selectByVisibleText(value);
-        return this;
+        return this.selectByText(value);
     }
 }
