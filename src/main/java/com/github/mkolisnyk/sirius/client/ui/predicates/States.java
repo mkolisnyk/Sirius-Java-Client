@@ -1,8 +1,5 @@
 package com.github.mkolisnyk.sirius.client.ui.predicates;
 
-import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.text;
-import static com.github.mkolisnyk.sirius.client.ui.predicates.States.exists;
-
 import java.lang.reflect.Field;
 
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -239,12 +236,34 @@ public final class States {
         return new Operation<Boolean, Control>() {
             @Override
             public Boolean apply(Control element) {
-                return element.get(text()).equals(text);
+                return element.get(Getters.text()).equals(text);
             }
 
             @Override
             public String description(Control parameter) {
                 return String.format("Element with locator '%s' has '%s' text.",
+                        parameter.getLocatorText(), text);
+            }
+        };
+    }
+    /**
+     * Checks the value of specific element for equality to the text specified as the parameter.
+     * Unlike {@link States#hasText(String)} predicate this one operates with getValue method or
+     * specific control and in general case it may return something different than just text.
+     * @param text the text to compare value with.
+     * @return true if element has specified text. False - otherwise.
+     */
+    @Alias("Value")
+    public static Operation<Boolean, Control> valueIs(final String text) {
+        return new Operation<Boolean, Control>() {
+            @Override
+            public Boolean apply(Control element) {
+                return element.get(Getters.value()).equals(text);
+            }
+
+            @Override
+            public String description(Control parameter) {
+                return String.format("Element with locator '%s' has '%s' value.",
                         parameter.getLocatorText(), text);
             }
         };

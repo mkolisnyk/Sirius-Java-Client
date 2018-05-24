@@ -41,7 +41,6 @@ public class FrameSwitchTest {
         OpenNewTabPage openNewTab = PageFactory.init(Driver.current(), OpenNewTabPage.class);
         openNewTab.navigate();
         openNewTab.buttonClickHere.perform(click());
-        Thread.sleep(5000);
         for (String handle : openNewTab.getDriver().getWindowHandles()) {
             System.out.println(handle);
         }

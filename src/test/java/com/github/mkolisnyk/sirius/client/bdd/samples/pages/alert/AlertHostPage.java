@@ -16,6 +16,8 @@ public class AlertHostPage extends Page {
     public Control buttonConfirmation;
     @FindBy(locator = "sample_prompt")
     public Control buttonPrompt;
+    @FindBy(locator = "dimension")
+    public Control buttonDimension;
 
     public AlertHostPage(WebDriver driverValue) {
         super(driverValue);

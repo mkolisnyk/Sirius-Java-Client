@@ -1,7 +1,26 @@
 <html>
+<head>
+<script>
+document.addEventListener("DOMContentLoaded", init, false);
+
+function printMousePos(event) {
+  alert("" + (event.clientX - dimension.offsetLeft) + ";" + (event.clientY - dimension.offsetTop));
+}
+
+  function init()
+  {
+var dimension = document.getElementById("dimension");
+dimension.addEventListener("click", printMousePos);
+  }
+
+
+</script>
+</head>
 <body>
 <button onclick="alert('Sample Alert')">Alert</button>
 <button onclick="confirm('Sample Confirmation')">Confirmation</button>
 <button onclick="text = prompt('Prompt text');document.getElementById('sample_prompt').innerHTML = text;" id='sample_prompt'>Prompt</button>
+<br>
+<button id="dimension"><table width="100" height="100"><tr><td>Dimensions</td></tr></table></button>
 </body>
 </html>

@@ -76,7 +76,7 @@ public class PlainBankingTest {
     public void testSampleBankingUsingPredicates() throws Exception {
         HomePage home = PageFactory.init(Driver.current(), HomePage.class);
         home.navigate()
-            .verify(current());
+            .verify(current()).get(source());
         CustomerDepositPage depositPage = home.loginAsCustomer("Harry Potter")
                 .buttonDeposit
                 .verify(exists(1))
@@ -85,7 +85,7 @@ public class PlainBankingTest {
         depositPage.navigate()
             .verify(current());
         depositPage.editDepositAmount.setValue("100")
-            .verify(hasText("100"));
+            .verify(hasText("100"), valueIs("100"));
         depositPage.buttonSubmitDeposit
             .verify(exists(1))
             .perform(click())

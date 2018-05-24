@@ -40,4 +40,11 @@ public class AlertPage extends Page {
         this.getDriver().switchTo().alert().sendKeys(value);
         return accept();
     }
+    /**
+     * Gets the alert message text.
+     * @return alert message text.
+     */
+    public String getText() {
+        return this.getDriver().switchTo().alert().getText();
+    }
 }
