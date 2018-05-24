@@ -98,7 +98,11 @@ public class PlainBankingTest {
     @Test
     public void testSampleBankingUsingNamesAndPredicates() throws Exception {
         ((HomePage) Page.forName("Banking Home")
-            .navigate().verify(current()))
+            .navigate()
+            .verify(
+                    current(),
+                    textPresent("Customer Login"),
+                    textPresent("Bank Manager Login")))
             .loginAsCustomer("Harry Potter")
             .field("Deposit")
                 .verify(

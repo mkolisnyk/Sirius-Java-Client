@@ -179,8 +179,7 @@ public class ControlSteps {
         for (Map<String, String> row : content) {
             String field = row.get("Field");
             String as = row.get("As");
-            String value = Page.getCurrent().field(field).getText();
-            Context.put(as, value);
+            noteControlTextAs(field, as);
         }
     }
     /**

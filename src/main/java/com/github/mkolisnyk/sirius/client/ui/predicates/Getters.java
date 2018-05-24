@@ -28,7 +28,7 @@ public final class Getters {
 
             @Override
             public AlertPage apply(Page page) {
-                AlertPage alert = new AlertPage(page.getDriver(), page);
+                AlertPage alert = new AlertPage(page);
                 return alert;
             }
         };

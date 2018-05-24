@@ -1,7 +1,5 @@
 package com.github.mkolisnyk.sirius.client.ui;
 
-import org.openqa.selenium.WebDriver;
-
 /**
  * Common page class for alert messages.
  * @author Mykola Kolisnyk
@@ -11,11 +9,10 @@ public class AlertPage extends Page {
     private Page parent;
     /**
      * Alert page constructor.
-     * @param driverValue the reference to current WebDriver instance.
      * @param parentPage the reference to the parent page where alert was thrown from.
      */
-    public AlertPage(WebDriver driverValue, Page parentPage) {
-        super(driverValue);
+    public AlertPage(Page parentPage) {
+        super(parentPage.getDriver());
         this.parent = parentPage;
     }
     /**
