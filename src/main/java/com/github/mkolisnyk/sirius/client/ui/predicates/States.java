@@ -269,7 +269,11 @@ public final class States {
         };
     }
     /**
-     * Checks if page contains specified text.
+     * Checks if some text is available on current page.
+     * In a number of cases we just need to check that some labels are available or some text is shown.
+     * It's too expensive to reserve dedicated field for each of such elements. But in order to make
+     * such check widely used the <b>isTextPresent</b> method gets such element dynamically and
+     * waits for element to appear.
      * @param text the text to check.
      * @return predicate which verifies text presence.
      */

@@ -1,6 +1,7 @@
 package com.github.mkolisnyk.sirius.cucumber.steps;
 
 import static com.github.mkolisnyk.sirius.client.ui.predicates.Actions.click;
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.first;
 
 import java.lang.reflect.Method;
 import java.math.RoundingMode;
@@ -148,11 +149,7 @@ public class ControlSteps {
     @Then("^(?:I should see |)at least one of the following elements is shown:$")
     public void atLeastOneElementIsShown(List<String> elements)
             throws Exception {
-        Control[] controls = new Control[elements.size()];
-        for (int i = 0; i < controls.length; i++) {
-            controls[i] = Page.getCurrent().field(elements.get(i));
-        }
-        Control control = Page.getFirstAvailableControlFromList(controls, (int) Page.getTimeout());
+        Control control = Page.getCurrent().get(first(elements, (int) Page.getTimeout()));
         Assert.assertNotNull("None of the expected elements list was found",
                 control);
     }

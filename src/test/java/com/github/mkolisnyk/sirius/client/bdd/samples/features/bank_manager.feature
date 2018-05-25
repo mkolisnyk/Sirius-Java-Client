@@ -16,10 +16,10 @@ Feature: Bank Manager
       | Last Name  |
       | Post Code  |
     And I should see the elements with the following properties:
-	  | Element    | Exists | Visible | Enabled | Has Text |
-      | First Name | Y      |        |  -       |          |
-      | Last Name  |        |   Y    |  -       |          |
-      | Post Code  | -      |        |  Y       |          |
+	  | Element    | Exists | Visible | Enabled  | Has Text |
+      | First Name | Y      |         |  -       |          |
+      | Last Name  |        |   Y     |  -       |          |
+      | Post Code  | -      |         |  Y       |          |
     And at least one of the following elements is shown:
       | First Name |
       | Last Name  |

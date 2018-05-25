@@ -1,7 +1,7 @@
 package com.github.mkolisnyk.sirius.client.ui;
 
+import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.rectangle;
 import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.source;
-import static com.github.mkolisnyk.sirius.client.ui.predicates.States.current;
 import static com.github.mkolisnyk.sirius.client.ui.predicates.States.exists;
 
 import java.awt.Rectangle;
@@ -151,86 +151,6 @@ public class Page {
     }
 
     /**
-     * <p>
-     * Checks multiple page classes in order to identify which of the classes proposed
-     * fit the current page. For each page class the {@link Page#isCurrent()} method is called.
-     * If for any page class the return value is true the instance of this class is created and
-     * returned.
-     * </p>
-     * <p>
-     * If none of proposed classes matches current page state the new iteration starts.
-     * </p>
-     * <p>
-     * If nothing is found after specified iteration limit the null value is returned.
-     * </p>
-     * @param pageClasses the list of page classes to look in.
-     * @param tries the number of iterations
-     * @return the Page instance for the current page found or null if none
-     *     of proposed page classes fits the current state.
-     * @throws Exception any class conversion or null pointer exception.
-     * @see {@link Page#isCurrent()}
-     */
-    public static Page getCurrentFromList(Class<? extends Page>[] pageClasses, int tries) throws Exception {
-        return getCurrentFromList(pageClasses, tries, false);
-    }
-
-    /**
-     * <p>
-     * Checks multiple page classes in order to identify which of the classes proposed
-     * fit the current page. For each page class the {@link Page#isCurrent()} method is called.
-     * If for any page class the return value is true the instance of this class is created and
-     * returned.
-     * </p>
-     * <p>
-     * If none of proposed classes matches current page state the new iteration starts.
-     * </p>
-     * <p>
-     * If nothing is found after specified iteration limit the null value is returned.
-     * </p>
-     * @param pageClasses the list of page classes to look in.
-     * @param tries the number of iterations.
-     * @param useCache (not in use at the moment) the flag identifying whether method should use
-     *      cached source for verifications prior to applying to application under test directly.
-     * @return the Page instance for the current page found or null if none
-     *      of proposed page classes fits the current state.
-     * @throws Exception any class conversion or null pointer exception.
-     * @see {@link Page#isCurrent()}
-     */
-    public static Page getCurrentFromList(Class<? extends Page>[] pageClasses, int tries, boolean useCache)
-            throws Exception {
-        Page[] pages = new Page[pageClasses.length];
-        for (int i = 0; i < pageClasses.length; i++) {
-            pages[i] = PageFactory.init(Driver.current(), pageClasses[i]);
-        }
-        for (int i = 0; i < tries; i++) {
-            for (Page page : pages) {
-                if (page.is(current(1))) {
-                    return page;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Goes through the list of proposed controls and returns the first one which appears.
-     * @param controls the list of controls to look for first available in.
-     * @param tries the limit of tries (similar to the timeout).
-     * @return the first control object which appears to be existing.
-     * @throws Exception any assertion or data conversion errors.
-     */
-    public static Control getFirstAvailableControlFromList(Control[] controls, int tries) throws Exception {
-        for (int i = 0; i < tries; i++) {
-            for (Control control : controls) {
-                if (control.is(exists(1))) {
-                    return control;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
      * Gets the actual WebDriver object if some WebDriver API is needed directly.
      * @return the actual WebDriver object.
      */
@@ -265,20 +185,6 @@ public class Page {
     public Page navigate() throws Exception {
         return this;
     }
-
-    /**
-     * Checks if some text is available on current page.
-     * In a number of cases we just need to check that some labels are available or some text is shown.
-     * It's too expensive to reserve dedicated field for each of such elements. But in order to make
-     * such check widely used the <b>isTextPresent</b> method gets such element dynamically and
-     * waits for element to appear.
-     * @param text the text value to wait for.
-     * @return true - the text label is available on screen, false - otherwise.
-     */
-    /*public boolean isTextPresent(String text) {
-        Control element = getTextControl(text);
-        return element.is(exists());
-    }*/
 
     /**
      * Captures the screenshot of current page.
@@ -393,7 +299,7 @@ public class Page {
         if (!scrollable.is(exists(SHORT_TIMEOUT))) {
             return false;
         }
-        Rectangle area = scrollable.getRect();
+        Rectangle area = scrollable.get(rectangle());
         Rectangle screenArea = Page.getScreenSize();
         area.x = Math.max(area.x, screenArea.x);
         area.y = Math.max(area.y, screenArea.y);

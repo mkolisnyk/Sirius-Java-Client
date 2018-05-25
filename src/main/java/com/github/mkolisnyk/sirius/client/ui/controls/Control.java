@@ -301,14 +301,6 @@ public class Control {
         return get(attribute("value"));
     }
     /**
-     * Gets rectangular dimensions of current control.
-     * @return current control dimantions.
-     */
-    public Rectangle getRect() {
-        return get(rectangle());
-    }
-
-    /**
      * <p>
      * Scrolls screen to current element.
      * </p>
