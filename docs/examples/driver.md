@@ -38,7 +38,9 @@ Driver.init(driver);
 
 ### Platform-based initialisation
 
-Driver object itself provides default initialisation based on configuration parameters taken from the configuration options.
+Driver object itself provides default initialisation based on configuration parameters taken from the configuration options. In particular, it creates WebDriver instance based on platform taken from the Configuration. Apart from it the initialisation requires capabilities and the URL (in case of remote drivers).
+
+This is sample code initialising WebDriver instance for web platforms:
 
 ``` java
         Configuration.load();
@@ -49,6 +51,8 @@ Driver object itself provides default initialisation based on configuration para
 ```
 
 ## Get instance for current thread
+
+When there is a need to get actual WebDriver instance for current thread, there is dedicated method called **current**. Here is sample code quitting the driver:
 
 ``` java
 Driver.current().quit();

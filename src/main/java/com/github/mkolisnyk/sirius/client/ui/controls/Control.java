@@ -1,10 +1,8 @@
 package com.github.mkolisnyk.sirius.client.ui.controls;
 
 import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.attribute;
-import static com.github.mkolisnyk.sirius.client.ui.predicates.Getters.rectangle;
 import static com.github.mkolisnyk.sirius.client.ui.predicates.States.exists;
 
-import java.awt.Rectangle;
 import java.util.HashMap;
 
 import org.junit.Assert;
