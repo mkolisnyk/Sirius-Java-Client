@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.time.Duration;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,7 +20,6 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.interactions.touch.TouchActions;
 import org.openqa.selenium.remote.Augmenter;
 import org.reflections.Reflections;
 
@@ -28,6 +28,10 @@ import com.github.mkolisnyk.sirius.client.ui.controls.Control;
 import com.github.mkolisnyk.sirius.client.ui.predicates.Operation;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.PerformsTouchActions;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
 
 /**
  * Common class for all page objects. Any abstraction which represents the application
@@ -336,13 +340,18 @@ public class Page {
         int times = 0;
         final int maxTries = 50;
         while (!currentState.equals(prevState)) {
-            TouchActions action = new TouchActions(driver);
-            action.scroll(scrollable.element(), endX - startX, endY - startY)
-                    .pause(seconds * DateTimeConstants.MILLIS_PER_SECOND);
-            action.perform();
             // ((AppiumDriver<?>) this.getDriver())
             // .swipe(startX, startY, endX, endY, seconds *
             // DateTimeConstants.MILLIS_PER_SECOND);
+            TouchAction action = new TouchAction((PerformsTouchActions) driver);
+            action.press(PointOption.point(startX, startY));
+            action.waitAction(
+                WaitOptions.waitOptions(
+                    Duration.ofMillis(
+                        seconds * DateTimeConstants.MILLIS_PER_SECOND)));
+            action.moveTo(PointOption.point(endX, endY));
+            action.release();
+            action.perform();
             if (once || times > maxTries) {
                 break;
             }
